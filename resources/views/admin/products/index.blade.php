@@ -91,7 +91,8 @@
                                                     <i class="icon-edit-3"></i>
                                                 </div>
                                             </a>
-                                            <form action="#" method="POST">
+                                            <form action="{{ route('admin.products.delete', ['id' => $product->id]) }}"
+                                                method="POST">
                                                 <div class="item text-danger delete">
                                                     <i class="icon-trash-2"></i>
                                                 </div>
@@ -112,3 +113,37 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(function() {
+            $('.delete').on('click', function(e) {
+                e.preventDefault();
+
+                let form = $(this).closest('form');
+
+                swal({
+                    title: "Delete Product?",
+                    text: "This action cannot be undone.\nThis product will be permanently removed.",
+                    icon: "warning",
+                    buttons: {
+                        cancel: {
+                            text: "Cancel",
+                            visible: true,
+                            className: "swal-button--cancel"
+                        },
+                        confirm: {
+                            text: "Delete",
+                            className: "swal-button--danger"
+                        }
+                    },
+                    dangerMode: true
+                }).then((willDelete) => {
+                    if (willDelete) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
+@endpush
