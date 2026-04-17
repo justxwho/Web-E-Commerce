@@ -39,14 +39,18 @@
                             value="{{ old('name') }}" aria-required="true" required="">
                         <div class="text-tiny">Do not exceed 100 characters when entering the product name.</div>
                     </fieldset>
-
+                    @error('name')
+                        <span class="alert alert-danger text-center">{{ $message }}</span>
+                    @enderror
                     <fieldset class="name">
                         <div class="body-title mb-10">Slug <span class="tf-color-1">*</span></div>
                         <input class="mb-10" type="text" placeholder="Enter product slug" name="slug" tabindex="0"
                             value="{{ old('slug') }}" aria-required="true" required="">
                         <div class="text-tiny">Do not exceed 100 characters when entering the product name.</div>
                     </fieldset>
-
+                    @error('slug')
+                        <span class="alert alert-danger text-center">{{ $message }}</span>
+                    @enderror
                     <div class="gap22 cols">
                         <fieldset class="category">
                             <div class="body-title mb-10">Category <span class="tf-color-1">*</span>
@@ -60,6 +64,9 @@
                                 </select>
                             </div>
                         </fieldset>
+                        @error('category_id')
+                            <span class="alert alert-danger text-center">{{ $message }}</span>
+                        @enderror
                         <fieldset class="brand">
                             <div class="body-title mb-10">Brand <span class="tf-color-1">*</span>
                             </div>
@@ -72,6 +79,9 @@
                                 </select>
                             </div>
                         </fieldset>
+                        @error('brand_id')
+                            <span class="alert alert-danger text-center">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <fieldset class="shortdescription">
@@ -80,7 +90,9 @@
                             aria-required="true" required="">{{ old('short_description') }}</textarea>
                         <div class="text-tiny">Do not exceed 100 characters when entering the product name.</div>
                     </fieldset>
-
+                    @error('short_description')
+                        <span class="alert alert-danger text-center">{{ $message }}</span>
+                    @enderror
                     <fieldset class="description">
                         <div class="body-title mb-10">Description <span class="tf-color-1">*</span>
                         </div>
@@ -88,6 +100,9 @@
                             required="">{{ old('description') }}</textarea>
                         <div class="text-tiny">Do not exceed 100 characters when entering the product name.</div>
                     </fieldset>
+                    @error('description')
+                        <span class="alert alert-danger text-center">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="wg-box">
                     <fieldset>
@@ -112,13 +127,13 @@
                             </div>
                         </div>
                     </fieldset>
+                    @error('image')
+                        <span class="alert alert-danger text-center">{{ $message }}</span>
+                    @enderror
 
                     <fieldset>
                         <div class="body-title mb-10">Upload Gallery Images</div>
                         <div class="upload-image mb-16">
-                            <!-- <div class="item">
-                                                                                                                                                                                        <img src="images/upload/upload-1.png" alt="">
-                                                                                                                                                                                    </div>                                                 -->
                             <div id="galUpload" class="item up-load">
                                 <label class="uploadfile" for="gFile">
                                     <span class="icon">
@@ -134,6 +149,9 @@
                             </div>
                         </div>
                     </fieldset>
+                    @error('images')
+                        <span class="alert alert-danger text-center">{{ $message }}</span>
+                    @enderror
 
                     <div class="cols gap22">
                         <fieldset class="name">
@@ -141,11 +159,17 @@
                             <input class="mb-10" type="text" placeholder="Enter regular price" name="regular_price"
                                 tabindex="0" value="{{ old('regular_price') }}" aria-required="true" required="">
                         </fieldset>
+                        @error('regular_price')
+                            <span class="alert alert-danger text-center">{{ $message }}</span>
+                        @enderror
                         <fieldset class="name">
                             <div class="body-title mb-10">Sale Price <span class="tf-color-1">*</span></div>
                             <input class="mb-10" type="text" placeholder="Enter sale price" name="sale_price"
                                 tabindex="0" value="{{ old('sale_price') }}" aria-required="true" required="">
                         </fieldset>
+                        @error('sale_price')
+                            <span class="alert alert-danger text-center">{{ $message }}</span>
+                        @enderror
                     </div>
 
 
@@ -156,12 +180,18 @@
                             <input class="mb-10" type="text" placeholder="Enter SKU" name="SKU" tabindex="0"
                                 value="{{ old('SKU') }}" aria-required="true" required="">
                         </fieldset>
+                        @error('SKU')
+                            <span class="alert alert-danger text-center">{{ $message }}</span>
+                        @enderror
                         <fieldset class="name">
                             <div class="body-title mb-10">Quantity <span class="tf-color-1">*</span>
                             </div>
                             <input class="mb-10" type="text" placeholder="Enter quantity" name="quantity"
                                 tabindex="0" value="{{ old('quantity') }}" aria-required="true" required="">
                         </fieldset>
+                        @error('quantity')
+                            <span class="alert alert-danger text-center">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="cols gap22">
@@ -174,6 +204,9 @@
                                 </select>
                             </div>
                         </fieldset>
+                        @error('stock_status')
+                            <span class="alert alert-danger text-center">{{ $message }}</span>
+                        @enderror
                         <fieldset class="name">
                             <div class="body-title mb-10">Featured</div>
                             <div class="select mb-10">
@@ -183,6 +216,9 @@
                                 </select>
                             </div>
                         </fieldset>
+                        @error('featured')
+                            <span class="alert alert-danger text-center">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="cols gap10">
                         <button class="tf-button w-full" type="submit">Add product</button>
