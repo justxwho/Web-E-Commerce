@@ -32,8 +32,14 @@
                             </div>
                         </form>
                     </div>
-                    <a class="tf-button style-1 w208" href="add-product.html"><i class="icon-plus"></i>Add new</a>
+                    <a class="tf-button style-1 w208" href="{{ route('admin.products.add') }}">
+                        <i class="icon-plus"></i>
+                        Add new
+                    </a>
                 </div>
+                @if (session()->has('status'))
+                    <p class="alert alert-success">{{ session()->get('status') }}</p>
+                @endif
                 <div class="table-responsive">
                     <table class="table table-striped table-bordered">
                         <thead>

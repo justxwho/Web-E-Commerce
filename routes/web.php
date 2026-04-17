@@ -21,22 +21,30 @@ Route::middleware(['auth', AuthAdmin::class])->group(function () {
 
     Route::prefix('admin')->group(function () {
         // Brands
-        Route::get('/brands', [AdminController::class, 'brands'])->name('admin.brands');
-        Route::get('/brand/add', [AdminController::class, 'add_brand'])->name('admin.brand.add');
-        Route::post('/brand/store', [AdminController::class, 'brand_store'])->name('admin.brand.store');
-        Route::get('/brand/{id}/edit', [AdminController::class, 'brand_edit'])->name('admin.brand.edit');
-        Route::post('/brand/update', [AdminController::class, 'brand_update'])->name('admin.brand.update');
-        Route::post('/brand/{id}/delete', [AdminController::class, 'brand_delete'])->name('admin.brand.delete');
+        Route::prefix('brands')->group(function () {
+            Route::get('/', [AdminController::class, 'brands'])->name('admin.brands');
+            Route::get('/add', [AdminController::class, 'add_brand'])->name('admin.brands.add');
+            Route::post('/store', [AdminController::class, 'brand_store'])->name('admin.brands.store');
+            Route::get('/{id}/edit', [AdminController::class, 'brand_edit'])->name('admin.brands.edit');
+            Route::post('/update', [AdminController::class, 'brand_update'])->name('admin.brands.update');
+            Route::post('/{id}/delete', [AdminController::class, 'brand_delete'])->name('admin.brands.delete');
+        });
 
         //Categories
-        Route::get('/categories', [AdminController::class, 'categories'])->name('admin.categories');
-        Route::get('/category/add', [AdminController::class, 'category_add'])->name('admin.category.add');
-        Route::post('/category/store', [AdminController::class, 'category_store'])->name('admin.category.store');
-        Route::get('/category/{id}/edit', [AdminController::class, 'category_edit'])->name('admin.category.edit');
-        Route::post('/category/update', [AdminController::class, 'category_update'])->name('admin.category.update');
-        Route::post('/category/{id}/delete', [AdminController::class, 'category_delete'])->name('admin.category.delete');
+        Route::prefix('categories')->group(function () {
+            Route::get('/', [AdminController::class, 'categories'])->name('admin.categories');
+            Route::get('/add', [AdminController::class, 'category_add'])->name('admin.categories.add');
+            Route::post('/store', [AdminController::class, 'category_store'])->name('admin.categories.store');
+            Route::get('/{id}/edit', [AdminController::class, 'category_edit'])->name('admin.categories.edit');
+            Route::post('/update', [AdminController::class, 'category_update'])->name('admin.categories.update');
+            Route::post('/{id}/delete', [AdminController::class, 'category_delete'])->name('admin.categories.delete');
+        });
 
         //Products
-        Route::get('/products', [AdminController::class, 'products'])->name('admin.products');
+        Route::prefix('products')->group(function () {
+            Route::get('/', [AdminController::class, 'products'])->name('admin.products');
+            Route::get('/add', [AdminController::class, 'product_add'])->name('admin.products.add');
+            Route::post('/store', [AdminController::class, 'product_store'])->name('admin.products.store');
+        });
     });
 });
