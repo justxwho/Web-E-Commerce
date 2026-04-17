@@ -511,6 +511,15 @@ progress {
   max-width: 100%;
   height: auto; }
 
+.thumb-img {
+  display: flex;
+  flex-direction: column;
+  column-gap: 20px;
+  width: 104px;
+  height: 104px;
+  object-fit: cover;
+}
+
 .figure {
   display: inline-block; }
 
@@ -13696,6 +13705,12 @@ textarea.form-control-lg {
         border: 0; }
         .product-single__media.horizontal-thumbnail .product-single__thumbnail .swiper-slide.swiper-slide-thumb-active {
           opacity: 1; }
+
+.product-single__thumbnail .swiper-slide {
+    width: 104px !important;
+    height: 104px !important;
+    flex-shrink: 0;
+}
   @media (min-width: 992px) {
     .product-single__media.vertical-dot {
       padding-left: 5.375rem; } }

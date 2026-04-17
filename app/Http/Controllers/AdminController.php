@@ -210,7 +210,7 @@ class AdminController extends Controller
             'SKU' => 'required',
             'stock_status' => 'required',
             'featured' => 'required',
-            'quantity' => 'required',
+            'quantity' => 'required|integer|min:0',
             'image' => 'required|mimes:png,jpg,jpeg|max:2048',
             'category_id' => 'required',
             'brand_id' => 'required',
@@ -225,7 +225,7 @@ class AdminController extends Controller
         $product->sale_price = $request->sale_price;
         $product->SKU = $request->SKU;
         $product->stock_status = $request->stock_status;
-        $product->featured = $request->featured ?? 0;
+        $product->featured = $request->has('featured') ? 1 : 0;
         $product->quantity = $request->quantity;
         $product->category_id = $request->category_id;
         $product->brand_id = $request->brand_id;
@@ -247,7 +247,7 @@ class AdminController extends Controller
             $allowedFileExtion = ['jpg', 'png', 'jpeg'];
             $files = $request->file('images');
             foreach ($files as $file) {
-                $gextension = $file->getClientOriginalExtension();
+                $gextension = strtolower($file->getClientOriginalExtension());
                 $gcheck = in_array($gextension, $allowedFileExtion);
                 if ($gcheck) {
                     $gfileName = $current_timestamp . "-" . $counter . "." . $gextension;
@@ -284,8 +284,8 @@ class AdminController extends Controller
             'SKU' => 'required',
             'stock_status' => 'required',
             'featured' => 'required',
-            'quantity' => 'required',
-            'image' => 'required|mimes:png,jpg,jpeg|max:2048',
+            'quantity' => 'required|integer|min:0',
+            'image' => 'nullable|mimes:png,jpg,jpeg|max:2048',
             'category_id' => 'required',
             'brand_id' => 'required',
         ]);
@@ -299,7 +299,7 @@ class AdminController extends Controller
         $product->sale_price = $request->sale_price;
         $product->SKU = $request->SKU;
         $product->stock_status = $request->stock_status;
-        $product->featured = $request->featured ?? 0;
+        $product->featured = $request->has('featured') ? 1 : 0;;
         $product->quantity = $request->quantity;
         $product->category_id = $request->category_id;
         $product->brand_id = $request->brand_id;
@@ -332,11 +332,11 @@ class AdminController extends Controller
                     File::delete(public_path('uploads/products/thumbnails') . '/' . $ofile);
                 }
             }
-            $allowedFileExtion = ['jpg', 'png', 'jpeg'];
+            $allowedFileExtension = ['jpg', 'png', 'jpeg'];
             $files = $request->file('images');
             foreach ($files as $file) {
-                $gextension = $file->getClientOriginalExtension();
-                $gcheck = in_array($gextension, $allowedFileExtion);
+                $gextension = strtolower($file->getClientOriginalExtension());
+                $gcheck = in_array($gextension, $allowedFileExtension);
                 if ($gcheck) {
                     $gfileName = $current_timestamp . "-" . $counter . "." . $gextension;
                     $this->GenerateProductsThumbnailsImage($file,  $gfileName);
