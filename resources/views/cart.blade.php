@@ -42,55 +42,56 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($items as $item)
+                                @foreach ($items as $item)
                                     <tr>
                                         <td>
                                             <div class="shopping-cart__product-item">
                                                 <img loading="lazy"
-                                                    src="{{ asset('uploads/products/' . $item->product->image) }}"
-                                                    width="120" height="120" alt="{{ $item->product->name }}">
+                                                    src="{{ asset('uploads/products/thumbnails') }}/{{ $item->product->image }}"
+                                                    width="120" height="120" alt="{{ $item->product->name }}" />
                                             </div>
                                         </td>
-
                                         <td>
                                             <div class="shopping-cart__product-item__detail">
                                                 <h4>{{ $item->product->name }}</h4>
+                                                <ul class="shopping-cart__product-item__options">
+                                                    <li>Color: Yellow</li>
+                                                    <li>Size: L</li>
+                                                </ul>
                                             </div>
                                         </td>
-
                                         <td>
-                                            ${{ number_format($item->price, 2) }}
+                                            <span class="shopping-cart__product-price">${{ $item->price }}</span>
                                         </td>
-
                                         <td>
-                                            <form action="{{ route('cart.update', $item->id) }}" method="POST">
-                                                @csrf
+                                            <div class="qty-control position-relative">
                                                 <input type="number" name="quantity" value="{{ $item->quantity }}"
-                                                    min="1" class="qty-control__number text-center"
-                                                    style="width:70px;">
-                                            </form>
+                                                    min="1" class="qty-control__number text-center">
+                                                <div class="qty-control__reduce">-</div>
+                                                <div class="qty-control__increase">+</div>
+                                            </div>
                                         </td>
-
                                         <td>
-                                            ${{ number_format($item->subtotal, 2) }}
+                                            <span
+                                                class="shopping-cart__subtotal">${{ $item->price * $item->quantity }}</span>
                                         </td>
-
                                         <td>
-                                            <a href="{{ route('cart.remove', $item->id) }}" class="remove-cart"
-                                                onclick="return confirm('Remove item?')">
-                                                ❌
+                                            <a href="{{ route('cart.remove', $item->id) }}" class="remove-cart">
+                                                <svg width="10" height="10" viewBox="0 0 10 10" fill="#767676"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <path
+                                                        d="M0.259435 8.85506L9.11449 0L10 0.885506L1.14494 9.74056L0.259435 8.85506Z" />
+                                                    <path
+                                                        d="M0.885506 0.0889838L9.74057 8.94404L8.85506 9.82955L0 0.97449L0.885506 0.0889838Z" />
+                                                </svg>
                                             </a>
                                         </td>
                                     </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="6" class="text-center">Cart is empty</td>
-                                    </tr>
-                                @endforelse
+                                @endforeach
                             </tbody>
                         </table>
                         <div class="cart-table-footer">
-                            <form action="#" class="position-relative bg-body">
+                            <form action="{{ route('cart.remove', $item->id) }}" class="position-relative bg-body">
                                 <input class="form-control" type="text" name="coupon_code" placeholder="Coupon Code">
                                 <input class="btn-link fw-medium position-absolute top-0 end-0 h-100 px-4" type="submit"
                                     value="APPLY COUPON">
@@ -106,41 +107,26 @@
                                     <tbody>
                                         <tr>
                                             <th>Subtotal</th>
-                                            <td>$1300</td>
+                                            <td>${{ $items->sum(fn($i) => $i->price * $i->quantity) }}</td>
                                         </tr>
                                         <tr>
                                             <th>Shipping</th>
-                                            <td>
-                                                <div class="form-check">
-                                                    <input class="form-check-input form-check-input_fill" type="checkbox"
-                                                        value="" id="free_shipping">
-                                                    <label class="form-check-label" for="free_shipping">Free
-                                                        shipping</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input form-check-input_fill" type="checkbox"
-                                                        value="" id="flat_rate">
-                                                    <label class="form-check-label" for="flat_rate">Flat rate: $49</label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input form-check-input_fill" type="checkbox"
-                                                        value="" id="local_pickup">
-                                                    <label class="form-check-label" for="local_pickup">Local pickup:
-                                                        $8</label>
-                                                </div>
-                                                <div>Shipping to AL.</div>
-                                                <div>
-                                                    <a href="#" class="menu-link menu-link_us-s">CHANGE ADDRESS</a>
-                                                </div>
-                                            </td>
+                                            <td>Free Shipping</td>
                                         </tr>
+                                        @php
+                                            $subtotal = $items->sum(fn($i) => $i->price * $i->quantity);
+                                            $vat = $subtotal * 0.1;
+                                            $total = $subtotal + $vat;
+                                        @endphp
+
                                         <tr>
-                                            <th>VAT</th>
-                                            <td>$19</td>
+                                            <th>VAT (10%)</th>
+                                            <td>${{ number_format($vat, 2) }}</td>
                                         </tr>
+
                                         <tr>
                                             <th>Total</th>
-                                            <td>$1319</td>
+                                            <td>${{ number_format($total, 2) }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
