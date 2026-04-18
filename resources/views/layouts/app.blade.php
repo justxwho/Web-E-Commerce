@@ -410,7 +410,7 @@
                             <a href="{{ route('shop.index') }}" class="navigation__link">Shop</a>
                         </li>
                         <li class="navigation__item">
-                            <a href="cart.html" class="navigation__link">Cart</a>
+                            <a href="{{ route('cart.index') }}" class="navigation__link">Cart</a>
                         </li>
                         <li class="navigation__item">
                             <a href="about.html" class="navigation__link">About</a>
@@ -529,13 +529,16 @@
                                 class="logo__image d-block" />
                         </a>
                     </div>
-                    <p class="footer-address">123 Beach Avenue, Surfside City, CA 00000</p>
-                    <p class="m-0"><strong class="fw-medium">contact@surfsidemedia.in</strong></p>
-                    <p><strong class="fw-medium">+1 000-000-0000</strong></p>
+                    <p class="footer-address">
+                        140 Le Trong Tan, Phuong Tay Thanh, Quan Tan Phu, Thanh pho Ho Chi Minh
+                    </p>
+                    <p class="m-0"><strong class="fw-medium">hanhatnam0912@gmail.com</strong></p>
+                    <p><strong class="fw-medium">+84 039 456 0224</strong></p>
 
                     <ul class="social-links list-unstyled d-flex flex-wrap mb-0">
                         <li>
-                            <a href="#" class="footer__social-link d-block">
+                            <a href="https://www.facebook.com/namha0912" class="footer__social-link d-block"
+                                target="_blank">
                                 <svg class="svg-icon svg-icon_facebook" width="9" height="15"
                                     viewBox="0 0 9 15" xmlns="http://www.w3.org/2000/svg">
                                     <use href="#icon_facebook" />
@@ -543,7 +546,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="footer__social-link d-block">
+                            <a href="https://x.com/" class="footer__social-link d-block" target="_blank">
                                 <svg class="svg-icon svg-icon_twitter" width="14" height="13"
                                     viewBox="0 0 14 13" xmlns="http://www.w3.org/2000/svg">
                                     <use href="#icon_twitter" />
@@ -551,7 +554,8 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="footer__social-link d-block">
+                            <a href="https://www.instagram.com/_ha1nam" class="footer__social-link d-block"
+                                target="_blank">
                                 <svg class="svg-icon svg-icon_instagram" width="14" height="13"
                                     viewBox="0 0 14 13" xmlns="http://www.w3.org/2000/svg">
                                     <use href="#icon_instagram" />
@@ -559,7 +563,8 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="footer__social-link d-block">
+                            <a href="https://www.youtube.com/@MixiGaming3con" class="footer__social-link d-block"
+                                target="_blank">
                                 <svg class="svg-icon svg-icon_youtube" width="16" height="11"
                                     viewBox="0 0 16 11" xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -568,7 +573,8 @@
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="footer__social-link d-block">
+                            <a href="https://www.pinterest.com/pin/788200372319545897/"
+                                class="footer__social-link d-block" target="_blank">
                                 <svg class="svg-icon svg-icon_pinterest" width="14" height="15"
                                     viewBox="0 0 14 15" xmlns="http://www.w3.org/2000/svg">
                                     <use href="#icon_pinterest" />
