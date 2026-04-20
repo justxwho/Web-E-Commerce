@@ -21,7 +21,8 @@ Route::prefix('/shop')->group(function () {
 Route::prefix('/cart')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('cart.index');
     Route::post('/add/{id}', [CartController::class, 'add'])->name('cart.add');
-    Route::post('/update/{id}', [CartController::class, 'update'])->name('cart.update');
+    Route::post('/increase/{id}', [CartController::class, 'increase'])->name('cart.increase');
+    Route::post('/decrease/{id}', [CartController::class, 'decrease'])->name('cart.decrease');
     Route::post('/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
     Route::post('/clear', [CartController::class, 'clear'])->name('cart.clear');
 });

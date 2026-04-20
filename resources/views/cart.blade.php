@@ -64,9 +64,9 @@
                                             <span class="shopping-cart__product-price">${{ $item->price }}</span>
                                         </td>
                                         <td>
-                                            <div class="qty-control position-relative">
+                                            <div class="qty-control position-relative" data-id="{{ $item->id }}">
                                                 <input type="number" name="quantity" value="{{ $item->quantity }}"
-                                                    min="1" class="qty-control__number text-center">
+                                                    min="1" class="qty-control__number text-center" readonly>
                                                 <div class="qty-control__reduce">-</div>
                                                 <div class="qty-control__increase">+</div>
                                             </div>
@@ -96,7 +96,6 @@
                                 <input class="btn-link fw-medium position-absolute top-0 end-0 h-100 px-4" type="submit"
                                     value="APPLY COUPON">
                             </form>
-                            <button class="btn btn-light">UPDATE CART</button>
                         </div>
                     </div>
                     <div class="shopping-cart__totals-wrapper">
@@ -107,7 +106,9 @@
                                     <tbody>
                                         <tr>
                                             <th>Subtotal</th>
-                                            <td>${{ $items->sum(fn($i) => $i->price * $i->quantity) }}</td>
+                                            <td id="cart-subtotal">
+                                                ${{ $items->sum(fn($i) => $i->price * $i->quantity) }}
+                                            </td>
                                         </tr>
                                         <tr>
                                             <th>Shipping</th>
@@ -121,12 +122,12 @@
 
                                         <tr>
                                             <th>VAT (10%)</th>
-                                            <td>${{ number_format($vat, 2) }}</td>
+                                            <td id="cart-vat">${{ number_format($vat, 2) }}</td>
                                         </tr>
 
                                         <tr>
                                             <th>Total</th>
-                                            <td>${{ number_format($total, 2) }}</td>
+                                            <td id="cart-total">${{ number_format($total, 2) }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -150,3 +151,135 @@
         </section>
     </main>
 @endsection
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            document.querySelectorAll('.qty-control').forEach(control => {
+
+                let id = control.dataset.id;
+                let input = control.querySelector('input');
+                let decrease = control.querySelector('.qty-control__reduce');
+                let increase = control.querySelector('.qty-control__increase');
+                let row = control.closest('tr');
+                let subtotalEl = row.querySelector('.shopping-cart__subtotal');
+
+                function showLoading() {
+                    let overlay = document.createElement('div');
+                    overlay.className = 'qty-loading';
+                    overlay.innerHTML = '<div class="qty-spinner"></div>';
+                    control.appendChild(overlay);
+
+                    control.style.pointerEvents = 'none';
+                }
+
+                function hideLoading() {
+                    let overlay = control.querySelector('.qty-loading');
+                    if (overlay) overlay.remove();
+
+                    control.style.pointerEvents = 'auto';
+                }
+
+                function updateUI(data) {
+                    input.value = data.qty;
+
+                    subtotalEl.innerText = '$' + data.item_subtotal;
+                    subtotalEl.classList.add('fade-update');
+
+                    document.getElementById('cart-subtotal').innerText = '$' + data.cart_subtotal;
+                    document.getElementById('cart-vat').innerText = '$' + data.vat.toFixed(2);
+                    document.getElementById('cart-total').innerText = '$' + data.total.toFixed(2);
+
+                    document.getElementById('cart-subtotal').classList.add('fade-update');
+                    document.getElementById('cart-vat').classList.add('fade-update');
+                    document.getElementById('cart-total').classList.add('fade-update');
+
+                    setTimeout(() => {
+                        subtotalEl.classList.remove('fade-update');
+                        document.getElementById('cart-subtotal').classList.remove('fade-update');
+                        document.getElementById('cart-vat').classList.remove('fade-update');
+                        document.getElementById('cart-total').classList.remove('fade-update');
+                    }, 250);
+                }
+
+                function handle(url) {
+                    showLoading();
+
+                    fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            }
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            updateUI(data);
+                            hideLoading();
+                        })
+                        .catch(err => {
+                            console.log(err);
+                            hideLoading();
+                        });
+                }
+
+                increase.addEventListener('click', () => {
+                    handle(`/cart/increase/${id}`);
+                });
+
+                decrease.addEventListener('click', () => {
+                    handle(`/cart/decrease/${id}`);
+                });
+
+            });
+
+        });
+    </script>
+@endpush
+
+@push('styles')
+    <style>
+        .qty-loading {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            z-index: 10;
+        }
+
+        .qty-spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid #ddd;
+            border-top: 3px solid #ff6a00;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* animation mượt khi update giá */
+        .fade-update {
+            animation: fadeUp 0.25s ease;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0.3;
+                transform: translateY(3px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+@endpush

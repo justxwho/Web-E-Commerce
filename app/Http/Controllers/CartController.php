@@ -59,23 +59,51 @@ class CartController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function increase($id)
     {
-        $request->validate([
-            'quantity' => 'required|integer|min:1'
-        ]);
-
-        $cart = $this->getCart();
-
-        $item = CartItem::where('id', $id)
-            ->where('cart_id', $cart->id)
-            ->firstOrFail();
-
-        $item->quantity = $request->quantity;
+        $item = CartItem::findOrFail($id);
+        $item->quantity += 1;
         $item->save();
 
-        return back()->with('success', 'Cart updated');
+        $cart = $item->cart->load('items');
+
+        $subtotal = $cart->items->sum(fn($i) => $i->price * $i->quantity);
+        $vat = $subtotal * 0.1;
+        $total = $subtotal + $vat;
+
+        return response()->json([
+            'qty' => $item->quantity,
+            'item_subtotal' => $item->quantity * $item->price,
+            'cart_subtotal' => $subtotal,
+            'vat' => $vat,
+            'total' => $total
+        ]);
     }
+
+    public function decrease($id)
+    {
+        $item = CartItem::findOrFail($id);
+
+        if ($item->quantity > 1) {
+            $item->quantity -= 1;
+            $item->save();
+        }
+
+        $cart = $item->cart->load('items');
+
+        $subtotal = $cart->items->sum(fn($i) => $i->price * $i->quantity);
+        $vat = $subtotal * 0.1;
+        $total = $subtotal + $vat;
+
+        return response()->json([
+            'qty' => $item->quantity,
+            'item_subtotal' => $item->quantity * $item->price,
+            'cart_subtotal' => $subtotal,
+            'vat' => $vat,
+            'total' => $total
+        ]);
+    }
+
 
     public function remove($id)
     {
