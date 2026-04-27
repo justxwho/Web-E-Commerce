@@ -41,3 +41,15 @@ body.stop-scrolling{height:100%;overflow:hidden}.sweet-overlay{background-color:
     padding: 10px 24px;
     font-size: 15px;
 }
+
+.swal-button--cancel {
+    color: #fff;
+    background-color: #222222;
+    border-color: #222222;
+    box-shadow: none;
+}
+
+.swal-button--cancel:hover {
+    background-color: #2f2f2f !important;
+    border-color: #2f2f2f !important;
+}
