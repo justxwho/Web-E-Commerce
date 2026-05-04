@@ -8,9 +8,34 @@ use Illuminate\Http\Request;
 
 class ShopController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::orderBy('created_at', 'DESC')->paginate(12);
+        $size = $request->query('size') ? $request->query('size') : 12;
+        $o_column = "";
+        $o_order = "";
+        $order = $request->query('order') ? $request->query('order') : -1;
+        switch ($order) {
+            case 1:
+                $o_column = 'created_at';
+                $o_order = 'DESC';
+                break;
+            case 2:
+                $o_column = 'created_at';
+                $o_order = 'ASC';
+                break;
+            case 3:
+                $o_column = 'regular_price';
+                $o_order = 'DESC';
+                break;
+            case 4:
+                $o_column = 'regular_price';
+                $o_order = 'ASC';
+                break;
+            default:
+                $o_column = 'id';
+                $o_order = 'DESC';
+        }
+        $products = Product::orderBy($o_column, $o_order)->paginate($size);
         if (Auth::check()) {
             $cart = \App\Models\Cart::where('user_id', Auth::id())->first();
         } else {
@@ -18,7 +43,7 @@ class ShopController extends Controller
         }
         $items = $cart ? $cart->items : collect();
 
-        return view('shop', compact('products', 'items'));
+        return view('shop', compact('products', 'items', 'size', 'order'));
     }
 
     public function product_details($product_slug)

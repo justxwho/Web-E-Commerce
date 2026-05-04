@@ -142,6 +142,15 @@ body {
     overflow: hidden;
 }
 
+.table-striped .image img {
+    display: inline-block;
+    vertical-align: middle;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
 .table-striped {
     min-width: 1200px;
 }
@@ -154,10 +163,20 @@ body {
 
 .pname {
     display: flex;
+    align-items: center;
     gap: 13px;
 }
 
 .view-icon {
     width: 20px;
     margin: 0 auto;
+}
+
+.table-striped td {
+    vertical-align: middle !important;
+}
+
+.pname .name {
+    display: flex;
+    align-items: center;
 }
