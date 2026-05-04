@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Brand;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -14,6 +15,7 @@ class ShopController extends Controller
         $o_column = "";
         $o_order = "";
         $order = $request->query('order') ? $request->query('order') : -1;
+        $f_brands = $request->query('brands');
         switch ($order) {
             case 1:
                 $o_column = 'created_at';
@@ -35,7 +37,10 @@ class ShopController extends Controller
                 $o_column = 'id';
                 $o_order = 'DESC';
         }
-        $products = Product::orderBy($o_column, $o_order)->paginate($size);
+        $brands = Brand::orderBy('name', 'ASC')->get();
+        $products = Product::where(function ($query) use ($f_brands) {
+            $query->whereIn('brand_id', explode(',', $f_brands))->orWhereRaw("'" . $f_brands . "'=''");
+        })->orderBy($o_column, $o_order)->paginate($size);
         if (Auth::check()) {
             $cart = \App\Models\Cart::where('user_id', Auth::id())->first();
         } else {
@@ -43,7 +48,7 @@ class ShopController extends Controller
         }
         $items = $cart ? $cart->items : collect();
 
-        return view('shop', compact('products', 'items', 'size', 'order'));
+        return view('shop', compact('products', 'items', 'size', 'order', 'brands', 'f_brands'));
     }
 
     public function product_details($product_slug)
