@@ -11,7 +11,8 @@ class Cart extends Model
 
     protected $fillable = [
         'user_id',
-        'session_id'
+        'session_id',
+        'type'
     ];
 
     public function items()
@@ -24,15 +25,33 @@ class Cart extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function getTotalAttribute()
+    public function scopeCart($query)
     {
-        return $this->items->sum(function ($item) {
-            return $item->price * $item->quantity;
-        });
+        return $query->where('type', 'cart');
+    }
+
+    public function scopeWishlist($query)
+    {
+        return $query->where('type', 'wishlist');
+    }
+
+    public function getSubtotalAttribute()
+    {
+        return $this->items->sum(fn($item) => $item->price * $item->quantity);
     }
 
     public function getTotalQtyAttribute()
     {
         return $this->items->sum('quantity');
+    }
+
+    public function getVatAttribute()
+    {
+        return $this->subtotal * 0.1;
+    }
+
+    public function getFinalTotalAttribute()
+    {
+        return $this->subtotal + $this->vat;
     }
 }

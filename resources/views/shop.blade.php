@@ -61,7 +61,7 @@
                                                     justify-content: flex-start;">
                                                 <input type="checkbox" name="categories" class="chk-category"
                                                     value="{{ $category->id }}"
-                                                    @if (in_array($category->id, explode(',', $f_categories))) checked ="checked" @endif>
+                                                    @if (in_array($category->id, explode(',', $f_categories ?? ''))) checked ="checked" @endif>
                                                 {{ $category->name }}
                                             </span>
                                             <span class="text-right float-end">{{ $category->products->count() }}</span>
@@ -182,7 +182,7 @@
                                                     justify-content: flex-start;">
                                                 <input type="checkbox" name="brands" value="{{ $brand->id }}"
                                                     class="chk-brand"
-                                                    @if (in_array($brand->id, explode(',', $f_brands))) checked ="checked" @endif>
+                                                    @if (in_array($brand->id, explode(',', $f_brands ?? ''))) checked ="checked" @endif>
                                                 {{ $brand->name }}
                                             </span>
                                             <span class="text-right float-end">
@@ -221,11 +221,11 @@
                             <div class="price-range__info d-flex align-items-center mt-2">
                                 <div class="me-auto">
                                     <span class="text-secondary">Min Price: </span>
-                                    <span class="price-range__min">$250</span>
+                                    <span class="price-range__min">${{ $min_price }}</span>
                                 </div>
                                 <div>
                                     <span class="text-secondary">Max Price: </span>
-                                    <span class="price-range__max">$500</span>
+                                    <span class="price-range__max">${{ $max_price }}</span>
                                 </div>
                             </div>
                         </div>
@@ -421,7 +421,7 @@
                                                 <use href="#icon_next_sm" />
                                             </svg></span>
                                     </div>
-                                    @if (isset($items) && $items->where('product_id', $product->id)->count() > 0)
+                                    @if ($cart && $cart->items && $cart->items->where('product_id', $product->id)->count() > 0)
                                         <a href="{{ route('cart.index') }}"
                                             class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium btn btn-warning mb-3">
                                             View Cart
@@ -484,14 +484,22 @@
                                         <span class="reviews-note text-lowercase text-secondary ms-1">8k+ reviews</span>
                                     </div>
 
-                                    <button
-                                        class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
-                                        title="Add To Wishlist">
-                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <use href="#icon_heart" />
-                                        </svg>
-                                    </button>
+                                    <form method="POST" action="{{ route('wishlist.add') }}">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{ $product->id }}">
+                                        <input type="hidden" name="name" value="{{ $product->name }}">
+                                        <input type="hidden" name="price"
+                                            value="{{ $product->sale_price == '' ? $product->regular_price : $product->sale_price }}">
+                                        <input type="hidden" name="quantity" value="1">
+                                        <button type="submit"
+                                            class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
+                                            title="Add To Wishlist">
+                                            <svg width="16" height="16" viewBox="0 0 20 20" fill="none"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <use href="#icon_heart" />
+                                            </svg>
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

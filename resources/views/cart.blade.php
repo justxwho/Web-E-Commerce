@@ -28,6 +28,15 @@
                 </a>
             </div>
             <div class="shopping-cart">
+                @php
+                    $items = $cart ? $cart->items : collect();
+                @endphp
+                @php
+                    $items = $cart ? $cart->items : collect();
+                    $subtotal = $items->sum(fn($i) => $i->price * $i->quantity);
+                    $vat = $subtotal * 0.1;
+                    $total = $subtotal + $vat;
+                @endphp
                 @if ($items->count() > 0)
                     <div class="cart-table__wrapper">
                         <table class="cart-table">
@@ -114,18 +123,14 @@
                                         <tr>
                                             <th>Subtotal</th>
                                             <td id="cart-subtotal">
-                                                ${{ $items->sum(fn($i) => $i->price * $i->quantity) }}
+                                                ${{ number_format($subtotal, 2) }}
                                             </td>
                                         </tr>
+
                                         <tr>
                                             <th>Shipping</th>
                                             <td>Free Shipping</td>
                                         </tr>
-                                        @php
-                                            $subtotal = $items->sum(fn($i) => $i->price * $i->quantity);
-                                            $vat = $subtotal * 0.1;
-                                            $total = $subtotal + $vat;
-                                        @endphp
 
                                         <tr>
                                             <th>VAT (10%)</th>

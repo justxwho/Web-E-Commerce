@@ -10,16 +10,18 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    private function getCart()
+    private function getCart($type = 'cart')
     {
         if (Auth::check()) {
             return Cart::firstOrCreate([
-                'user_id' => Auth::id()
+                'user_id' => Auth::id(),
+                'type' => $type
             ]);
         }
 
         return Cart::firstOrCreate([
-            'session_id' => session()->getId()
+            'session_id' => session()->getId(),
+            'type' => $type
         ]);
     }
 
@@ -35,8 +37,7 @@ class CartController extends Controller
             ->first();
 
         if ($item) {
-            $item->quantity += 1;
-            $item->save();
+            $item->increment('quantity');
         } else {
             CartItem::create([
                 'cart_id' => $cart->id,
@@ -53,54 +54,52 @@ class CartController extends Controller
     {
         $cart = $this->getCart()->load('items.product');
 
-        return view('cart', [
-            'cart' => $cart,
-            'items' => $cart->items
-        ]);
+        return view('cart', compact('cart'));
     }
 
     public function increase($id)
     {
-        $item = CartItem::findOrFail($id);
-        $item->quantity += 1;
-        $item->save();
+        $cart = $this->getCart();
 
-        $cart = $item->cart->load('items');
+        $item = CartItem::where('id', $id)
+            ->where('cart_id', $cart->id)
+            ->firstOrFail();
 
-        $subtotal = $cart->items->sum(fn($i) => $i->price * $i->quantity);
-        $vat = $subtotal * 0.1;
-        $total = $subtotal + $vat;
+        $item->increment('quantity');
+
+        $cart->load('items');
 
         return response()->json([
             'qty' => $item->quantity,
-            'item_subtotal' => $item->quantity * $item->price,
-            'cart_subtotal' => $subtotal,
-            'vat' => $vat,
-            'total' => $total
+            'item_subtotal' => $item->subtotal,
+            'cart_subtotal' => $cart->subtotal,
+            'vat' => $cart->vat,
+            'total' => $cart->final_total
         ]);
     }
 
     public function decrease($id)
     {
-        $item = CartItem::findOrFail($id);
+        $cart = $this->getCart();
+
+        $item = CartItem::where('id', $id)
+            ->where('cart_id', $cart->id)
+            ->firstOrFail();
 
         if ($item->quantity > 1) {
-            $item->quantity -= 1;
-            $item->save();
+            $item->decrement('quantity');
+        } else {
+            $item->delete();
         }
 
-        $cart = $item->cart->load('items');
-
-        $subtotal = $cart->items->sum(fn($i) => $i->price * $i->quantity);
-        $vat = $subtotal * 0.1;
-        $total = $subtotal + $vat;
+        $cart->load('items');
 
         return response()->json([
-            'qty' => $item->quantity,
-            'item_subtotal' => $item->quantity * $item->price,
-            'cart_subtotal' => $subtotal,
-            'vat' => $vat,
-            'total' => $total
+            'qty' => $item->quantity ?? 0,
+            'item_subtotal' => $item->subtotal ?? 0,
+            'cart_subtotal' => $cart->subtotal,
+            'vat' => $cart->vat,
+            'total' => $cart->final_total
         ]);
     }
 

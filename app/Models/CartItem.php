@@ -30,4 +30,9 @@ class CartItem extends Model
     {
         return $this->price * $this->quantity;
     }
+
+    protected $casts = [
+        'price' => 'float',
+        'quantity' => 'integer'
+    ];
 }

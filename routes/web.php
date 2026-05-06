@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\WishlistController;
 use App\Http\Middleware\AuthAdmin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,10 @@ Route::prefix('/cart')->group(function () {
     Route::post('/decrease/{id}', [CartController::class, 'decrease'])->name('cart.decrease');
     Route::post('/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
     Route::post('/clear', [CartController::class, 'clear'])->name('cart.clear');
+});
+
+Route::prefix('/wishlist')->group(function () {
+    Route::post('/add', [WishlistController::class, 'add_to_wishlist'])->name('wishlist.add');
 });
 
 Route::middleware(['auth'])->group(function () {

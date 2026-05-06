@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('session_id')->nullable()->index();
+            $table->string('type')->default('cart');
             $table->timestamps();
 
-            $table->unique(['user_id']);
-            $table->unique(['session_id']);
+            $table->unique(['user_id', 'type']);
+            $table->unique(['session_id', 'type']);
         });
     }
 
