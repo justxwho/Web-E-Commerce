@@ -502,6 +502,11 @@
                             xmlns="http://www.w3.org/2000/svg">
                             <use href="#icon_heart" />
                         </svg>
+                        @if ($wishlistCount > 0)
+                            <span class="cart-amount d-block position-absolute js-cart-items-count">
+                                {{ $wishlistCount }}
+                            </span>
+                        @endif
                     </a>
 
                     <a href="{{ route('cart.index') }}" class="header-tools__item header-tools__cart">
