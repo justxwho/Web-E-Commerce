@@ -30,8 +30,6 @@
             <div class="shopping-cart">
                 @php
                     $items = $cart ? $cart->items : collect();
-                @endphp
-                @php
                     $items = $cart ? $cart->items : collect();
                     $subtotal = $items->sum(fn($i) => $i->price * $i->quantity);
                     $vat = $subtotal * 0.1;
@@ -63,10 +61,10 @@
                                         <td>
                                             <div class="shopping-cart__product-item__detail">
                                                 <h4>{{ $item->product->name }}</h4>
-                                                <ul class="shopping-cart__product-item__options">
+                                                {{-- <ul class="shopping-cart__product-item__options">
                                                     <li>Color: Yellow</li>
                                                     <li>Size: L</li>
-                                                </ul>
+                                                </ul> --}}
                                             </div>
                                         </td>
                                         <td>

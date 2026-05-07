@@ -10,6 +10,34 @@ use Illuminate\Http\Request;
 
 class WishlistController extends Controller
 {
+    private function getCart($type = 'wishlist')
+    {
+        if (Auth::check()) {
+            return Cart::firstOrCreate([
+                'user_id' => Auth::id(),
+                'type' => $type
+            ]);
+        }
+
+        return Cart::firstOrCreate([
+            'session_id' => session()->getId(),
+            'type' => $type
+        ]);
+    }
+
+    public function index()
+    {
+        $cart = $this->getCart('wishlist');
+
+        $items = $cart
+            ? CartItem::with('product')
+            ->where('cart_id', $cart->id)
+            ->get()
+            : collect();
+
+        return view('wishlist', compact('items', 'cart'));
+    }
+
     public function add_to_wishlist(Request $request)
     {
         $wishlist = Auth::check()
@@ -44,5 +72,61 @@ class WishlistController extends Controller
         }
 
         return back()->with('success', 'Added to wishlist');
+    }
+
+    public function remove($id)
+    {
+        $cart = $this->getCart('wishlist');
+
+        $item = CartItem::where('id', $id)
+            ->where('cart_id', $cart->id)
+            ->firstOrFail();
+
+        $item->delete();
+
+        return back()->with('success', 'Item removed');
+    }
+
+    public function clear()
+    {
+        $cart = $this->getCart('wishlist');
+
+        CartItem::where('cart_id', $cart->id)->delete();
+
+        return back()->with('success', 'Wishlist cleared');
+    }
+
+    public function toggle(Request $request)
+    {
+        $cart = $this->getCart('wishlist');
+
+        $productId = $request->id;
+
+        $item = CartItem::where('cart_id', $cart->id)
+            ->where('product_id', $productId)
+            ->first();
+
+        if ($item) {
+            $item->delete();
+
+            return response()->json([
+                'status' => 'removed',
+                'product_id' => $productId
+            ]);
+        }
+
+        $product = Product::findOrFail($productId);
+
+        CartItem::create([
+            'cart_id' => $cart->id,
+            'product_id' => $product->id,
+            'price' => $product->sale_price ?: $product->regular_price,
+            'quantity' => 1
+        ]);
+
+        return response()->json([
+            'status' => 'added',
+            'product_id' => $productId
+        ]);
     }
 }

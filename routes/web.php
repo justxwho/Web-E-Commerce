@@ -30,6 +30,9 @@ Route::prefix('/cart')->group(function () {
 
 Route::prefix('/wishlist')->group(function () {
     Route::post('/add', [WishlistController::class, 'add_to_wishlist'])->name('wishlist.add');
+    Route::get('/', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+    Route::post('/clear', [WishlistController::class, 'clear'])->name('wishlist.clear');
 });
 
 Route::middleware(['auth'])->group(function () {
