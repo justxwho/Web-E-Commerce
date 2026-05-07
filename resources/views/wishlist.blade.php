@@ -48,8 +48,9 @@
                                 <tr>
                                     <th>Product</th>
                                     <th></th>
-                                    <th>Quantity</th>
-                                    <th>Price</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-center">Price</th>
+                                    <th class="text-center"></th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -72,16 +73,37 @@
                                             </ul> --}}
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <span class="shopping-cart__product-price">
                                                 {{ $item->product->quantity }}
                                             </span>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <span class="shopping-cart__product-price">${{ $item->price }}</span>
+                                        </td>
+                                        <td class="text-center">
+                                            @if ($shoppingCart && $shoppingCart->items->contains('product_id', $item->product->id))
+                                                <a href="{{ route('cart.index') }}"
+                                                    class="btn btn-warning text-uppercase fw-medium mb-3">
+                                                    View Cart
+                                                </a>
+                                            @else
+                                                <form name="addtocart-form" method="post"
+                                                    action="{{ route('cart.add', ['id' => $item->product->id]) }}">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{ $item->product->id }}">
+                                                    <input type="hidden" name="price"
+                                                        value="{{ $item->product->sale_price ?: $item->product->regular_price }}">
+                                                    <button type="submit" class="btn btn-dark text-uppercase fw-medium"
+                                                        title="Add To Cart">
+                                                        Add To Cart
+                                                    </button>
+                                                </form>
+                                            @endif
                                         </td>
                                         <td>
                                             <form method="POST" action="{{ route('wishlist.remove', $item->id) }}">
+                                                @csrf
                                                 <a href="javascript:void(0)" class="remove-cart">
                                                     <svg width="10" height="10" viewBox="0 0 10 10" fill="#767676"
                                                         xmlns="http://www.w3.org/2000/svg">
@@ -99,6 +121,7 @@
                         </table>
                         <div class="cart-table-footer">
                             <form method="POST" action="{{ route('wishlist.clear') }}">
+                                @csrf
                                 <button class="btn btn-light clear-cart" type="submit">CLEAR CART</button>
                             </form>
                         </div>

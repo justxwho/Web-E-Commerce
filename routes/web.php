@@ -33,6 +33,7 @@ Route::prefix('/wishlist')->group(function () {
     Route::get('/', [WishlistController::class, 'index'])->name('wishlist.index');
     Route::post('/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
     Route::post('/clear', [WishlistController::class, 'clear'])->name('wishlist.clear');
+    Route::post('/toggle', [WishlistController::class, 'toggle'])->name('wishlist.toggle');
 });
 
 Route::middleware(['auth'])->group(function () {

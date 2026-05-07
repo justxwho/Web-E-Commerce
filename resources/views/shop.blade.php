@@ -19,6 +19,18 @@
         input[type="checkbox"] {
             accent-color: #222222;
         }
+
+        .heart-active {
+            fill: red !important;
+        }
+
+        .heart-active use {
+            fill: red !important;
+        }
+
+        .pc__btn-wl {
+            fill: red !important;
+        }
     </style>
     <main class="pt-90">
         <section class="shop-main container d-flex pt-4 pt-xl-5">
@@ -484,6 +496,11 @@
                                         <span class="reviews-note text-lowercase text-secondary ms-1">8k+ reviews</span>
                                     </div>
 
+                                    @php
+                                        $inWishlist =
+                                            $wishlistCart &&
+                                            $wishlistCart->items->where('product_id', $product->id)->count() > 0;
+                                    @endphp
                                     <form method="POST" action="{{ route('wishlist.add') }}">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $product->id }}">
@@ -494,7 +511,8 @@
                                         <button type="submit"
                                             class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
                                             title="Add To Wishlist">
-                                            <svg width="16" height="16" viewBox="0 0 20 20" fill="none"
+                                            <svg width="16" height="16" viewBox="0 0 20 20"
+                                                class="{{ $inWishlist ? 'heart-active' : '' }}"
                                                 xmlns="http://www.w3.org/2000/svg">
                                                 <use href="#icon_heart" />
                                             </svg>

@@ -35,7 +35,9 @@ class WishlistController extends Controller
             ->get()
             : collect();
 
-        return view('wishlist', compact('items', 'cart'));
+        $shoppingCart = $this->getCart('cart')->load('items');
+
+        return view('wishlist', compact('items', 'cart', 'shoppingCart'));
     }
 
     public function add_to_wishlist(Request $request)

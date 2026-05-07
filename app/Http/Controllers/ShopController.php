@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Cart;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -80,6 +81,12 @@ class ShopController extends Controller
 
         $items = $cart ? $cart->items : collect();
 
+        //WISHLISH
+        $wishlistCart = Auth::check()
+            ? Cart::where('user_id', Auth::id())->where('type', 'wishlist')->with('items')->first()
+            : Cart::where('session_id', session()->getId())->where('type', 'wishlist')->with('items')->first();
+
+
         return view('shop', compact(
             'products',
             'items',
@@ -91,7 +98,8 @@ class ShopController extends Controller
             'categories',
             'f_categories',
             'min_price',
-            'max_price'
+            'max_price',
+            'wishlistCart'
         ));
     }
 
