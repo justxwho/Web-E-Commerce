@@ -467,7 +467,7 @@
                         @yield('content')
 
                         <div class="bottom-page">
-                            <div class="body-text">Copyright © 2024 SurfsideMedia</div>
+                            <div class="body-text">Copyright © 2026 Ha Nhat Nam</div>
                         </div>
                     </div>
 

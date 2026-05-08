@@ -488,15 +488,18 @@
                                         $inWishlist =
                                             $wishlistCart &&
                                             $wishlistCart->items->where('product_id', $product->id)->count() > 0;
+                                        $wishlistItem = $inWishlist
+                                            ? $wishlistCart->items->where('product_id', $product->id)->first()
+                                            : null;
                                     @endphp
-                                    <form method="POST" action="{{ route('wishlist.add') }}">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{ $product->id }}">
-                                        <input type="hidden" name="name" value="{{ $product->name }}">
-                                        <input type="hidden" name="price"
-                                            value="{{ $product->sale_price == '' ? $product->regular_price : $product->sale_price }}">
-                                        <input type="hidden" name="quantity" value="1">
-                                        @if (!$inWishlist)
+                                    @if (!$inWishlist)
+                                        <form method="POST" action="{{ route('wishlist.add') }}">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $product->id }}">
+                                            <input type="hidden" name="name" value="{{ $product->name }}">
+                                            <input type="hidden" name="price"
+                                                value="{{ $product->sale_price == '' ? $product->regular_price : $product->sale_price }}">
+                                            <input type="hidden" name="quantity" value="1">
                                             <button type="submit"
                                                 class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
                                                 title="Add To Wishlist">
@@ -506,20 +509,24 @@
                                                 </svg>
                                             </button>
                                         @else
-                                            <button title="Add To Wishlist"
-                                                class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                    viewBox="0 0 24 24" fill="#e74c3c">
+                                            <form method="POST"
+                                                action="{{ route('wishlist.remove', $wishlistItem->id) }}">
+                                                @csrf
+                                                <button title="Add To Wishlist" type="submit"
+                                                    class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                        viewBox="0 0 24 24" fill="#e74c3c">
 
-                                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+                                                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
                                                                 2 5.42 4.42 3 7.5 3
                                                                 c1.74 0 3.41.81 4.5 2.09
                                                                 C13.09 3.81 14.76 3 16.5 3
                                                                 19.58 3 22 5.42 22 8.5
                                                                 c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                                                </svg>
-                                            </button>
-                                        @endif
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                    @endif
                                     </form>
                                 </div>
                             </div>
