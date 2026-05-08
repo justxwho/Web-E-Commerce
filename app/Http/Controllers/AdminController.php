@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Coupon;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -385,5 +386,11 @@ class AdminController extends Controller
         $img->resize(104, 104, function ($constraint) {
             $constraint->aspectRatio();
         })->save($destinationThumbnails . '/' . $imageName);
+    }
+
+    public function coupons()
+    {
+        $coupons = Coupon::orderby('expiry_data', 'DESC')->paginate(12);
+        return view('admin.coupons.index', compact('coupons'));
     }
 }
