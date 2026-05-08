@@ -80,6 +80,7 @@ Route::middleware(['auth', AuthAdmin::class])->group(function () {
             Route::post('/store', [AdminController::class, 'coupon_store'])->name('admin.coupons.store');
             Route::get('/{id}/edit', [AdminController::class, 'coupon_edit'])->name('admin.coupons.edit');
             Route::post('/update', [AdminController::class, 'coupon_update'])->name('admin.coupons.update');
+            Route::post('{id}/delete', [AdminController::class, 'coupon_delete'])->name('admin.coupons.delete');
         });
     });
 });
