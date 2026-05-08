@@ -97,38 +97,4 @@ class WishlistController extends Controller
 
         return back()->with('success', 'Wishlist cleared');
     }
-
-    public function toggle(Request $request)
-    {
-        $cart = $this->getCart('wishlist');
-
-        $productId = $request->id;
-
-        $item = CartItem::where('cart_id', $cart->id)
-            ->where('product_id', $productId)
-            ->first();
-
-        if ($item) {
-            $item->delete();
-
-            return response()->json([
-                'status' => 'removed',
-                'product_id' => $productId
-            ]);
-        }
-
-        $product = Product::findOrFail($productId);
-
-        CartItem::create([
-            'cart_id' => $cart->id,
-            'product_id' => $product->id,
-            'price' => $product->sale_price ?: $product->regular_price,
-            'quantity' => 1
-        ]);
-
-        return response()->json([
-            'status' => 'added',
-            'product_id' => $productId
-        ]);
-    }
 }
