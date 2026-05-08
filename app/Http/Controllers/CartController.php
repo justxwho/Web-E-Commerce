@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Models\Coupon;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -124,5 +127,60 @@ class CartController extends Controller
         CartItem::where('cart_id', $cart->id)->delete();
 
         return back()->with('success', 'Cart cleared');
+    }
+
+    public function apply_coupon_code(Request $request)
+    {
+        $coupon_code = $request->coupon_code;
+
+        if (!$coupon_code) {
+            return redirect()->back()->with('error', 'Please enter a coupon code.');
+        }
+
+        $cart = $this->getCart()->load('items');
+
+        $coupon = Coupon::where('code', $coupon_code)
+            ->where('expiry_date', '>=', Carbon::today())
+            ->where('cart_value', '<=', $cart->subtotal)
+            ->first();
+
+        if (!$coupon) {
+            return redirect()->back()->with('error', 'Invalid or expired coupon code.');
+        }
+
+        Session::put('coupon', [
+            'code'       => $coupon->code,
+            'type'       => $coupon->type,
+            'value'      => $coupon->value,
+            'cart_value' => $coupon->cart_value,
+        ]);
+
+        $this->calculateDiscount($cart);
+
+        return redirect()->back()->with('success', 'Coupon "' . $coupon->code . '" has been applied!');
+    }
+
+    private function calculateDiscount(Cart $cart)
+    {
+        $coupon   = Session::get('coupon');
+        $subtotal = $cart->subtotal;
+
+        if ($coupon['type'] === 'fixed') {
+            $discount = (float) $coupon['value'];
+        } else {
+            // percentage
+            $discount = ($subtotal * (float) $coupon['value']) / 100;
+        }
+
+        $subtotalAfterDiscount = max(0, $subtotal - $discount);
+        $taxAfterDiscount = $subtotalAfterDiscount * 0.1;
+        $totalAfterDiscount = $subtotalAfterDiscount + $taxAfterDiscount;
+
+        Session::put('discounts', [
+            'discount' => number_format($discount, 2, '.', ''),
+            'subtotal' => number_format($subtotalAfterDiscount, 2, '.', ''),
+            'tax' => number_format($taxAfterDiscount, 2, '.', ''),
+            'total' => number_format($totalAfterDiscount, 2, '.', ''),
+        ]);
     }
 }

@@ -1,5 +1,10 @@
 @extends('layouts.app')
 @section('content')
+    <style>
+        .text-success {
+            color: #278c04 !important;
+        }
+    </style>
     <main class="pt-90">
         <div class="mb-4 pb-4"></div>
         <section class="shop-checkout container">
@@ -101,8 +106,11 @@
                             </tbody>
                         </table>
                         <div class="cart-table-footer">
-                            <form action="javascript:void(0)" class="position-relative bg-body">
-                                <input class="form-control" type="text" name="coupon_code" placeholder="Coupon Code">
+                            <form action="{{ route('cart.coupon.apply') }}" method="POST"
+                                class="position-relative bg-body">
+                                @csrf
+                                <input class="form-control" type="text" name="coupon_code" placeholder="Coupon Code"
+                                    value="@if (Session::has('coupon')) {{ Session::get('coupon')['code'] }} Applied! @endif">
                                 <input class="btn-link fw-medium position-absolute top-0 end-0 h-100 px-4" type="submit"
                                     value="APPLY COUPON">
                             </form>
@@ -111,36 +119,70 @@
                                 <button class="btn btn-light clear-cart" type="submit">CLEAR CART</button>
                             </form>
                         </div>
+                        <div>
+                            @if (Session::has('success'))
+                                <p class="text-success">{{ Session::get('success') }}</p>
+                            @elseif (Session::has('error'))
+                                <p class="text-success">{{ Session::get('error') }}</p>
+                            @endif
+                        </div>
                     </div>
                     <div class="shopping-cart__totals-wrapper">
                         <div class="sticky-content">
                             <div class="shopping-cart__totals">
                                 <h3>Cart Totals</h3>
-                                <table class="cart-totals">
-                                    <tbody>
-                                        <tr>
-                                            <th>Subtotal</th>
-                                            <td id="cart-subtotal">
-                                                ${{ number_format($subtotal, 2) }}
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <th>Shipping</th>
-                                            <td>Free Shipping</td>
-                                        </tr>
-
-                                        <tr>
-                                            <th>VAT (10%)</th>
-                                            <td id="cart-vat">${{ number_format($vat, 2) }}</td>
-                                        </tr>
-
-                                        <tr>
-                                            <th>Total</th>
-                                            <td id="cart-total">${{ number_format($total, 2) }}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                @if (Session::has('discounts'))
+                                    @php $discounts = Session::get('discounts'); @endphp
+                                    <table class="cart-totals">
+                                        <tbody>
+                                            <tr>
+                                                <th>Subtotal</th>
+                                                <td id="cart-subtotal">${{ number_format($subtotal, 2) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Discount ({{ Session::get('coupon')['code'] }})</th>
+                                                <td id="cart-discount">- ${{ $discounts['discount'] }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Subtotal After Discount</th>
+                                                <td id="cart-subtotal-after">${{ $discounts['subtotal'] }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Shipping</th>
+                                                <td>Free Shipping</td>
+                                            </tr>
+                                            <tr>
+                                                <th>VAT (10%)</th>
+                                                <td id="cart-vat">${{ $discounts['tax'] }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total</th>
+                                                <td id="cart-total">${{ $discounts['total'] }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                @else
+                                    <table class="cart-totals">
+                                        <tbody>
+                                            <tr>
+                                                <th>Subtotal</th>
+                                                <td id="cart-subtotal">${{ number_format($subtotal, 2) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Shipping</th>
+                                                <td>Free Shipping</td>
+                                            </tr>
+                                            <tr>
+                                                <th>VAT (10%)</th>
+                                                <td id="cart-vat">${{ number_format($vat, 2) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Total</th>
+                                                <td id="cart-total">${{ number_format($total, 2) }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                @endif
                             </div>
                             <div class="mobile_fixed-btn_wrapper">
                                 <div class="button-wrapper container">
