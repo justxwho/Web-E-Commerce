@@ -160,6 +160,14 @@ class CartController extends Controller
         return redirect()->back()->with('success', 'Coupon "' . $coupon->code . '" has been applied!');
     }
 
+    public function remove_coupon_code()
+    {
+        Session::forget('coupon');
+        Session::forget('discounts');
+
+        return redirect()->back()->with('success', 'Coupon removed.');
+    }
+
     private function calculateDiscount(Cart $cart)
     {
         $coupon   = Session::get('coupon');

@@ -27,6 +27,7 @@ Route::prefix('/cart')->group(function () {
     Route::post('/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
     Route::post('/clear', [CartController::class, 'clear'])->name('cart.clear');
     Route::post('/apply-coupon', [CartController::class, 'apply_coupon_code'])->name('cart.coupon.apply');
+    Route::post('/remove-coupon', [CartController::class, 'remove_coupon_code'])->name('cart.coupon.remove');
 });
 
 Route::prefix('/wishlist')->group(function () {
