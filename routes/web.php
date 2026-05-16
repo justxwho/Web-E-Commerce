@@ -37,6 +37,10 @@ Route::prefix('/wishlist')->group(function () {
     Route::post('/clear', [WishlistController::class, 'clear'])->name('wishlist.clear');
 });
 
+Route::prefix('checkout')->group(function () {
+    Route::get('/', [CartController::class, 'checkout'])->name('cart.checkout');
+});
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/account-dashboard', [UserController::class, 'index'])->name('user.index');
 });

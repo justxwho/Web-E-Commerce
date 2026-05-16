@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
 use App\Models\Coupon;
+use App\Models\Address;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
@@ -190,5 +191,24 @@ class CartController extends Controller
             'tax' => number_format($taxAfterDiscount, 2, '.', ''),
             'total' => number_format($totalAfterDiscount, 2, '.', ''),
         ]);
+    }
+
+    public function checkout()
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        $cart = $this->getCart()->load('items.product');
+
+        if ($cart->items->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
+        }
+
+        $address = Address::where('user_id', Auth::id())
+            ->where('isdefault', 1)
+            ->first();
+
+        return view('checkout', compact('cart', 'address'));
     }
 }
