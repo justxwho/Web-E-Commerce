@@ -81,7 +81,7 @@ Route::middleware(['auth', AuthAdmin::class])->group(function () {
             Route::post('/{id}/delete', [AdminController::class, 'product_delete'])->name('admin.products.delete');
         });
 
-        //Coupon
+        //Coupons
         Route::prefix('/coupons')->group(function () {
             Route::get('/', [AdminController::class, 'coupons'])->name('admin.coupons');
             Route::get('/add', [AdminController::class, 'coupon_add'])->name('admin.coupons.add');
@@ -89,6 +89,11 @@ Route::middleware(['auth', AuthAdmin::class])->group(function () {
             Route::get('/{id}/edit', [AdminController::class, 'coupon_edit'])->name('admin.coupons.edit');
             Route::post('/update', [AdminController::class, 'coupon_update'])->name('admin.coupons.update');
             Route::post('{id}/delete', [AdminController::class, 'coupon_delete'])->name('admin.coupons.delete');
+        });
+
+        //Orders
+        Route::prefix('/orders')->group(function () {
+            Route::get('/', [AdminController::class, 'orders'])->name('admin.orders');
         });
     });
 });
