@@ -67,7 +67,7 @@
                                         <td class="text-center">{{ $order->delivered_date }}</td>
                                         <td></td>
                                         <td class="text-center">
-                                            <a href="order-details.html">
+                                            <a href="{{ route('admin.orders.order-details', ['id' => $order->id]) }}">
                                                 <div class="list-icon-function view-icon">
                                                     <div class="item eye">
                                                         <i class="icon-eye"></i>
