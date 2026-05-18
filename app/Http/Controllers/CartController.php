@@ -7,10 +7,15 @@ use App\Models\CartItem;
 use App\Models\Product;
 use App\Models\Coupon;
 use App\Models\Address;
+use App\Models\Order;
+use App\Models\OrderItem;
+use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use League\CommonMark\Node\Query\OrExpr;
 
 class CartController extends Controller
 {
@@ -210,5 +215,123 @@ class CartController extends Controller
             ->first();
 
         return view('checkout', compact('cart', 'address'));
+    }
+
+    public function place_an_order(Request $request)
+    {
+        $request->validate([
+            'mode' => 'required|in:card,paypal,cod',
+        ]);
+
+        $user_id = Auth::id();
+        $address = Address::where('user_id', $user_id)->where('isdefault', true)->first();
+
+        if (!$address) {
+            $request->validate([
+                'name'     => 'required|max:100',
+                'phone'    => 'required|numeric|digits:10',
+                'zip'      => 'required|numeric|digits:6',
+                'state'    => 'required',
+                'city'     => 'required',
+                'address'  => 'required',
+                'locality' => 'required',
+                'landmark' => 'nullable|max:255',
+            ]);
+
+            $address           = new Address();
+            $address->name     = $request->name;
+            $address->phone    = $request->phone;
+            $address->zip      = $request->zip;
+            $address->state    = $request->state;
+            $address->city     = $request->city;
+            $address->address  = $request->address;
+            $address->locality = $request->locality;
+            $address->landmark = $request->landmark;
+            $address->country  = 'Viet Nam';
+            $address->user_id  = $user_id;
+            $address->isdefault = true;
+            $address->save();
+        }
+
+        $cart = $this->getCart()->load('items.product');
+
+        if ($cart->items->isEmpty()) {
+            return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
+        }
+
+        $this->setAmountforCheckout($cart);
+        $checkout = Session::get('checkout');
+
+        $order = new Order();
+        $order->user_id = $user_id;
+        $order->subtotal = $checkout['subtotal'];
+        $order->discount = $checkout['discount'];
+        $order->tax = $checkout['tax'];
+        $order->total = $checkout['total'];
+        $order->name = $address->name;
+        $order->phone = $address->phone;
+        $order->address = $address->locality . ', ' . $address->address . ', ' . $address->state;
+        $order->city = $address->city;
+        $order->country = $address->country;
+        $order->landmark = $address->landmark;
+        $order->zip = $address->zip;
+        $order->save();
+
+        foreach ($cart->items as $item) {
+            OrderItem::create([
+                'product_id' => $item->product_id,
+                'order_id'   => $order->id,
+                'price'      => $item->price,
+                'quantity'   => $item->quantity,
+            ]);
+        }
+
+        if ($request->mode === 'cod') {
+            Transaction::create([
+                'user_id'  => $user_id,
+                'order_id' => $order->id,
+                'mode'     => $request->mode,
+                'status'   => 'pending',
+            ]);
+        } else if ($request->mode === 'card') {
+            //
+        } else if ($request->mode === 'paypal') {
+            //
+        }
+
+        CartItem::where('cart_id', $cart->id)->delete();
+        Session::forget(['checkout', 'coupon', 'discounts']);
+
+        return redirect()->route('cart.order.confirmation', ['order' => $order->id]);
+    }
+
+    public function setAmountforCheckout(Cart $cart)
+    {
+        if ($cart->items->isEmpty()) {
+            Session::forget('checkout');
+            return;
+        }
+
+        if (Session::has('coupon')) {
+            Session::put('checkout', [
+                'discount' => Session::get('discounts')['discount'],
+                'subtotal' => Session::get('discounts')['subtotal'],
+                'tax' => Session::get('discounts')['tax'],
+                'total' => Session::get('discounts')['total'],
+            ]);
+        } else {
+            Session::put('checkout', [
+                'discount' => 0,
+                'subtotal' => $cart->subtotal,
+                'tax' => $cart->vat,
+                'total' => $cart->final_total,
+            ]);
+        }
+    }
+
+    public function order_confirmation(Order $order)
+    {
+        $order->load('orderItems.product', 'transaction');
+        return view('order-confirmation', compact('order'));
     }
 }

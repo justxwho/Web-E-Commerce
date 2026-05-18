@@ -36,7 +36,7 @@
                 <div class="alert alert-success">{{ session('success') }}</div>
             @endif
 
-            <form name="checkout-form" action="" method="POST">
+            <form name="checkout-form" action="{{ route('cart.place.an.order') }}" method="POST">
                 @csrf
                 <div class="checkout-form">
                     <div class="billing-info__wrapper">
@@ -144,8 +144,8 @@
                                     <div class="form-floating my-3">
                                         <input type="text" class="form-control @error('landmark') is-invalid @enderror"
                                             name="landmark" id="landmark"
-                                            value="{{ old('landmark', $address->landmark ?? '') }}" required>
-                                        <label for="landmark">Landmark *</label>
+                                            value="{{ old('landmark', $address->landmark ?? '') }}">
+                                        <label for="landmark">Landmark</label>
                                         @error('landmark')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -230,50 +230,26 @@
 
                             {{-- Payment Methods --}}
                             <div class="checkout__payment-methods">
+
                                 <div class="form-check">
-                                    <input class="form-check-input form-check-input_fill" type="radio"
-                                        name="payment_method" id="checkout_payment_method_1" value="bank_transfer"
-                                        checked>
-                                    <label class="form-check-label" for="checkout_payment_method_1">
-                                        Direct bank transfer
-                                        <p class="option-detail">
-                                            Make your payment directly into our bank account. Please use your Order ID as
-                                            the payment reference. Your order will not be shipped until the funds have
-                                            cleared in our account.
-                                        </p>
+                                    <input class="form-check-input form-check-input_fill" type="radio" name="mode"
+                                        id="mode1" value="card" required>
+                                    <label class="form-check-label" for="mode1">
+                                        Credit card
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input form-check-input_fill" type="radio"
-                                        name="payment_method" id="checkout_payment_method_2" value="check">
-                                    <label class="form-check-label" for="checkout_payment_method_2">
-                                        Check payments
-                                        <p class="option-detail">
-                                            Phasellus sed volutpat orci. Fusce eget lore mauris vehicula elementum gravida
-                                            nec dui. Aenean aliquam varius ipsum, non ultricies tellus sodales eu.
-                                        </p>
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input form-check-input_fill" type="radio"
-                                        name="payment_method" id="checkout_payment_method_3" value="cod">
-                                    <label class="form-check-label" for="checkout_payment_method_3">
-                                        Cash on delivery
-                                        <p class="option-detail">
-                                            Phasellus sed volutpat orci. Fusce eget lore mauris vehicula elementum gravida
-                                            nec dui. Aenean aliquam varius ipsum, non ultricies tellus sodales eu.
-                                        </p>
-                                    </label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input form-check-input_fill" type="radio"
-                                        name="payment_method" id="checkout_payment_method_4" value="paypal">
-                                    <label class="form-check-label" for="checkout_payment_method_4">
+                                    <input class="form-check-input form-check-input_fill" type="radio" name="mode"
+                                        id="mode2" value="paypal" required>
+                                    <label class="form-check-label" for="mode2">
                                         Paypal
-                                        <p class="option-detail">
-                                            Phasellus sed volutpat orci. Fusce eget lore mauris vehicula elementum gravida
-                                            nec dui. Aenean aliquam varius ipsum, non ultricies tellus sodales eu.
-                                        </p>
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input form-check-input_fill" type="radio" name="mode"
+                                        id="mode3" value="cod" required>
+                                    <label class="form-check-label" for="mode3">
+                                        Cash on delivery
                                     </label>
                                 </div>
 
