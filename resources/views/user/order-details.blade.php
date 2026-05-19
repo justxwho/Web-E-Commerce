@@ -136,6 +136,9 @@
                             </div>
                         </div>
                         <div class="table-responsive">
+                            @if (Session::has('status'))
+                                <p class="alert alert-success">{{ Session::get('status') }}</p>
+                            @endif
                             <table class="table table-bordered">
                                 <tr>
                                     <th>Order No</th>
@@ -158,7 +161,7 @@
                                     <td colspan="5">
                                         @if ($order->status === 'delivered')
                                             <span class="badge bg-success">Delivered</span>
-                                        @elseif ($order->status === 'Canceled')
+                                        @elseif ($order->status === 'canceled')
                                             <span class="badge bg-danger">Canceled</span>
                                         @else
                                             <span class="badge bg-warning">Ordered</span>
@@ -282,18 +285,51 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="wg-box mt-5 text-right">
-                        <form action="http://localhost:8000/account-order/cancel-order" method="POST">
-                            <input type="hidden" name="_token" value="3v611ELheIo6fqsgspMOk0eiSZjncEeubOwUa6YT"
-                                autocomplete="off">
-                            <input type="hidden" name="_method" value="PUT"> <input type="hidden" name="order_id"
-                                value="1">
-                            <button type="submit" class="btn btn-danger">Cancel Order</button>
-                        </form>
-                    </div>
-                </div>
 
+                    @if ($order->status === 'ordered')
+                        <div class="wg-box mt-5 text-right">
+                            <form action="{{ route('user.order.cancel') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="order_id" value={{ $order->id }}>
+                                <button type="button" class="btn btn-danger cancel-order">Cancel Order</button>
+                            </form>
+                        </div>
+                    @endif
+                </div>
             </div>
         </section>
     </main>
 @endsection
+@push('scripts')
+    <script>
+        $(function() {
+            $('.cancel-order').on('click', function(e) {
+                e.preventDefault();
+
+                let form = $(this).closest('form');
+
+                swal({
+                    title: "Cancel Order?",
+                    text: "This action cannot be undone.\nThis order will be permanently canceled.",
+                    icon: "warning",
+                    buttons: {
+                        cancel: {
+                            text: "Back",
+                            visible: true,
+                            className: "swal-button--cancel"
+                        },
+                        confirm: {
+                            text: "Cancel Order",
+                            className: "swal-button--danger"
+                        }
+                    },
+                    dangerMode: true
+                }).then((willDelete) => {
+                    if (willDelete) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
+@endpush
