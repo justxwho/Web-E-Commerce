@@ -9,6 +9,7 @@ use App\Models\Coupon;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Transaction;
+use App\Models\Slide;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -88,12 +89,9 @@ class AdminController extends Controller
 
     public function GenerateBrandsThumbnailsImage($image, $imageName)
     {
-        $destinationPath = public_path('uploads/brands');
-        $img = Image::read($image->path());
-        $img->cover(124, 124, 'top');
-        $img->resize(124, 124, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save($destinationPath . '/' . $imageName);
+        Image::read($image->path())
+            ->cover(124, 124, 'top')
+            ->save(public_path('uploads/brands') . '/' . $imageName);
     }
 
     public function brand_delete($id)
@@ -171,12 +169,9 @@ class AdminController extends Controller
 
     public function GenerateCategoriesThumbnailsImage($image, $imageName)
     {
-        $destinationPath = public_path('uploads/categories');
-        $img = Image::read($image->path());
-        $img->cover(124, 124, 'top');
-        $img->resize(124, 124, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save($destinationPath . '/' . $imageName);
+        Image::read($image->path())
+            ->cover(124, 124, 'top')
+            ->save(public_path('uploads/categories') . '/' . $imageName);
     }
 
     public function category_delete($id)
@@ -379,16 +374,13 @@ class AdminController extends Controller
 
     public function GenerateProductsThumbnailsImage($image, $imageName)
     {
+        $destinationPath       = public_path('uploads/products');
         $destinationThumbnails = public_path('uploads/products/thumbnails');
-        $destinationPath = public_path('uploads/products');
-        $img = Image::read($image->path());
-        $img->cover(540, 689, 'top');
-        $img->resize(540, 689, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save($destinationPath . '/' . $imageName);
-        $img->resize(104, 104, function ($constraint) {
-            $constraint->aspectRatio();
-        })->save($destinationThumbnails . '/' . $imageName);
+
+        $img = Image::read($image->path())->cover(540, 689, 'top');
+        $img->save($destinationPath . '/' . $imageName);
+
+        $img->cover(104, 104, 'top')->save($destinationThumbnails . '/' . $imageName);
     }
 
     public function coupons()
@@ -488,5 +480,101 @@ class AdminController extends Controller
             $transaction->save();
         }
         return back()->with('status', 'Status changed successfully !');
+    }
+
+    public function slides()
+    {
+        $slides = Slide::orderBy('id', 'DESC')->paginate(12);
+        return view('admin.slides.index', compact('slides'));
+    }
+
+    public function slide_add()
+    {
+        return view('admin.slides.add');
+    }
+
+    public function slide_store(Request $request)
+    {
+        $request->validate([
+            'tagline' => 'required',
+            'title' => 'required',
+            'subtitle' => 'required',
+            'link' => 'required',
+            'status' => 'required',
+            'image' => 'required|mimes:png,jpg,jpeg|max:2048'
+        ]);
+
+        $slide = new Slide();
+        $slide->tagline = $request->tagline;
+        $slide->title = $request->title;
+        $slide->subtitle = $request->subtitle;
+        $slide->link = $request->link;
+        $slide->status = $request->status;
+
+        $image = $request->file('image');
+        $file_extension = $request->file('image')->extension();
+        $file_name = Carbon::now()->timestamp . '.' . $file_extension;
+        $this->GenerateSlideThumbnailsImage($image, $file_name);
+        $slide->image = $file_name;
+        $slide->save();
+        return redirect()->route('admin.slides.index')->with('status', 'Slide has been added successfully !');
+    }
+
+    public function GenerateSlideThumbnailsImage($image, $imageName)
+    {
+        $destinationPath = public_path('uploads/slides');
+
+        Image::read($image->path())
+            ->cover(124, 124, 'top')
+            ->save($destinationPath . '/' . $imageName);
+    }
+
+    public function slide_edit($id)
+    {
+        $slide = Slide::find($id);
+        return view('admin.slides.edit', compact('slide'));
+    }
+
+    public function slide_update(Request $request)
+    {
+        $request->validate([
+            'tagline' => 'required',
+            'title' => 'required',
+            'subtitle' => 'required',
+            'link' => 'required',
+            'status' => 'required',
+            'image' => 'nullable|mimes:png,jpg,jpeg|max:2048'
+        ]);
+
+        $slide = Slide::find($request->id);
+        $slide->tagline = $request->tagline;
+        $slide->title = $request->title;
+        $slide->subtitle = $request->subtitle;
+        $slide->link = $request->link;
+        $slide->status = $request->status;
+
+        if ($request->hasFile('image')) {
+            if (File::exists(public_path('uploads/slides') . '/' . $slide->image)) {
+                File::delete(public_path('uploads/slides') . '/' . $slide->image);
+            }
+
+            $image = $request->file('image');
+            $file_extension = $request->file('image')->extension();
+            $file_name = Carbon::now()->timestamp . '.' . $file_extension;
+            $this->GenerateSlideThumbnailsImage($image, $file_name);
+            $slide->image = $file_name;
+        }
+        $slide->save();
+        return redirect()->route('admin.slides.index')->with('status', 'Slide has been updated successfully !');
+    }
+
+    public function slide_delete($id)
+    {
+        $slide = Slide::find($id);
+        if (File::exists(public_path('uploads/slides') . '/' . $slide->image)) {
+            File::delete(public_path('uploads/slides') . '/' . $slide->image);
+        }
+        $slide->delete();
+        return redirect()->route('admin.slides.index')->with('status', 'Slide has been deleted successfully !');
     }
 }

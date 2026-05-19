@@ -100,5 +100,15 @@ Route::middleware(['auth', AuthAdmin::class])->group(function () {
             Route::get('/order/{id}/details', [AdminController::class, 'order_details'])->name('admin.orders.order-details');
             Route::post('/update-status', [AdminController::class, 'update_order_status'])->name('admin.orders.status.update');
         });
+
+        //Slides
+        Route::prefix('/slides')->group(function () {
+            Route::get('/', [AdminController::class, 'slides'])->name('admin.slides.index');
+            Route::get('/add', [AdminController::class, 'slide_add'])->name('admin.slides.add');
+            Route::post('/store', [AdminController::class, 'slide_store'])->name('admin.slides.store');
+            Route::get('/{id}/edit', [AdminController::class, 'slide_edit'])->name('admin.slides.edit');
+            Route::post('/update', [AdminController::class, 'slide_update'])->name('admin.slides.update');
+            Route::post('{id}/delete', [AdminController::class, 'slide_delete'])->name('admin.slides.delete');
+        });
     });
 });

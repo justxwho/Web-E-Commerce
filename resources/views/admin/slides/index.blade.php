@@ -2,7 +2,7 @@
 @section('content')
     <style>
         .table-striped td.pname {
-            width: 340px;
+            width: 250px;
             padding: 10px 12px !important;
         }
 
@@ -36,6 +36,8 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            border-radius: 8px;
+            display: block;
         }
 
         .table-striped .name a.body-title-2 {
@@ -71,38 +73,25 @@
 
         .table-striped th:first-child,
         .table-striped td:first-child {
-            width: 100px;
+            width: 80px;
             white-space: nowrap;
         }
 
         .table-striped td:nth-child(2) {
-
             overflow: hidden;
             padding: 8px !important;
         }
 
-        .table-striped th:nth-child(3),
-        .table-striped td:nth-child(3) {
-            width: 300px;
-            white-space: nowrap;
-        }
-
-        .table-striped th:nth-child(4),
-        .table-striped td:nth-child(4) {
-            width: 200px;
-            white-space: nowrap;
-        }
-
         .table-striped th:last-child,
         .table-striped td:last-child {
-            width: 100px;
+            width: 80px;
             white-space: nowrap;
         }
     </style>
     <div class="main-content-inner">
         <div class="main-content-wrap">
             <div class="flex items-center flex-wrap justify-between gap20 mb-27">
-                <h3>Categories</h3>
+                <h3>Slider</h3>
                 <ul class="breadcrumbs flex items-center flex-wrap justify-start gap10">
                     <li>
                         <a href="{{ route('admin.index') }}">
@@ -113,7 +102,7 @@
                         <i class="icon-chevron-right"></i>
                     </li>
                     <li>
-                        <div class="text-tiny">Categories</div>
+                        <div class="text-tiny">Slider</div>
                     </li>
                 </ul>
             </div>
@@ -131,72 +120,68 @@
                             </div>
                         </form>
                     </div>
-                    <a class="tf-button style-1 w208" href="{{ route('admin.categories.add') }}">
-                        <i class="icon-plus"></i>
+                    <a class="tf-button style-1 w208" href="{{ route('admin.slides.add') }}"><i class="icon-plus"></i>
                         Add new
                     </a>
                 </div>
                 <div class="wg-table table-all-user">
-                    <div class="table-responsive">
-                        @if (session()->has('status'))
-                            <p class="alert alert-success">{{ session()->get('status') }}</p>
-                        @endif
-                        <table class="table table-striped table-bordered">
-                            <thead>
+                    @if (session()->has('status'))
+                        <p class="alert alert-success">{{ session()->get('status') }}</p>
+                    @endif
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Image</th>
+                                <th>Tagline</th>
+                                <th>Title</th>
+                                <th>Subtitle</th>
+                                <th>Link</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($slides as $slide)
                                 <tr>
-                                    <th>#</th>
-                                    <th>Name</th>
-                                    <th>Slug</th>
-                                    <th>Products</th>
-                                    <th>Action</th>
+                                    <td>{{ $slide->id }}</td>
+                                    <td class="pname">
+                                        <div class="image">
+                                            <img src="{{ asset('uploads/slides') }}/{{ $slide->image }}"
+                                                alt="{{ $slide->title }}" class="image">
+                                        </div>
+                                    </td>
+                                    <td>{{ $slide->tagline }}</td>
+                                    <td>{{ $slide->title }}</td>
+                                    <td>{{ $slide->subtitle }}</td>
+                                    <td>{{ $slide->link }}</td>
+                                    <td>
+                                        <div class="list-icon-function">
+                                            <a href="{{ route('admin.slides.edit', ['id' => $slide->id]) }}">
+                                                <div class="item edit">
+                                                    <i class="icon-edit-3"></i>
+                                                </div>
+                                            </a>
+                                            <form action="{{ route('admin.slides.delete', ['id' => $slide->id]) }}"
+                                                method="POST">
+                                                <div class="item text-danger delete">
+                                                    <i class="icon-trash-2"></i>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($categories as $category)
-                                    <tr>
-                                        <td>4</td>
-                                        <td class="pname">
-                                            <div class="image">
-                                                <img src="{{ asset('uploads/categories') }}/{{ $category->image }}"
-                                                    alt="{{ $category->name }}" class="image">
-                                            </div>
-                                            <div class="name">
-                                                <a href="#" class="body-title-2">{{ $category->name }}</a>
-                                            </div>
-                                        </td>
-                                        <td>{{ $category->slug }}</td>
-                                        <td><a href="#" target="_blank">2</a></td>
-                                        <td>
-                                            <div class="list-icon-function">
-                                                <a href="{{ route('admin.categories.edit', ['id' => $category->id]) }}">
-                                                    <div class="item edit">
-                                                        <i class="icon-edit-3"></i>
-                                                    </div>
-                                                </a>
-                                                <form
-                                                    action="{{ route('admin.categories.delete', ['id' => $category->id]) }}"
-                                                    method="POST">
-                                                    <div class="item text-danger delete">
-                                                        <i class="icon-trash-2"></i>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
                 <div class="divider"></div>
                 <div class="flex items-center justify-between flex-wrap gap10 wgp-pagination">
-                    {{ $categories->links('pagination::bootstrap-5') }}
+                    {{ $slides->links('pagination::bootstrap-5') }}
                 </div>
             </div>
         </div>
     </div>
 @endsection
-
 @push('scripts')
     <script>
         $(function() {
@@ -206,8 +191,8 @@
                 let form = $(this).closest('form');
 
                 swal({
-                    title: "Delete Category?",
-                    text: "This action cannot be undone.\nThis category will be permanently removed.",
+                    title: "Delete Slide?",
+                    text: "This action cannot be undone.\nThis slide will be permanently removed.",
                     icon: "warning",
                     buttons: {
                         cancel: {

@@ -1,5 +1,104 @@
 @extends('layouts.admin')
 @section('content')
+    <style>
+        .table-striped td.pname {
+            width: 355px;
+            padding: 10px 12px !important;
+        }
+
+        .table-striped td.pname .inner {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .table-striped th:nth-child(2) {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            vertical-align: middle !important;
+        }
+
+        .table-striped td:nth-child(2) {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            vertical-align: middle !important;
+        }
+
+        .table-striped .image {
+            width: 60px;
+            height: 60px;
+            flex-shrink: 0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .table-striped .image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .table-striped .name a.body-title-2 {
+            font-weight: 600;
+            font-size: 14px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            color: #333;
+        }
+
+        .table-striped .name .text-tiny {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 140px;
+        }
+
+        .table-striped td,
+        .table-striped th {
+            vertical-align: middle !important;
+            font-size: 13px;
+        }
+
+        .table-striped thead th {
+            white-space: nowrap;
+            font-weight: 600;
+        }
+
+        .table-striped th:first-child,
+        .table-striped td:first-child {
+            width: 80px;
+            white-space: nowrap;
+        }
+
+        .table-striped td:nth-child(2) {
+
+            overflow: hidden;
+            padding: 8px !important;
+        }
+
+        .table-striped th:nth-child(3),
+        .table-striped td:nth-child(3) {
+            width: 300px;
+            white-space: nowrap;
+        }
+
+        .table-striped th:nth-child(4),
+        .table-striped td:nth-child(4) {
+            width: 200px;
+            white-space: nowrap;
+        }
+
+        .table-striped th:last-child,
+        .table-striped td:last-child {
+            width: 80px;
+            white-space: nowrap;
+        }
+    </style>
     <div class="main-content-inner">
         <div class="main-content-wrap">
             <div class="flex items-center flex-wrap justify-between gap20 mb-27">
