@@ -97,6 +97,7 @@ Route::middleware(['auth', AuthAdmin::class])->group(function () {
         Route::prefix('/orders')->group(function () {
             Route::get('/', [AdminController::class, 'orders'])->name('admin.orders');
             Route::get('/order/{id}/details', [AdminController::class, 'order_details'])->name('admin.orders.order-details');
+            Route::post('/update-status', [AdminController::class, 'update_order_status'])->name('admin.orders.status.update');
         });
     });
 });
