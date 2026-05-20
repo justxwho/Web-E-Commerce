@@ -68,6 +68,19 @@
             white-space: nowrap;
             font-weight: 600;
         }
+
+        .bg-success {
+            background-color: #40c710 !important;
+        }
+
+        .bg-danger {
+            background-color: #f44032 !important;
+        }
+
+        .bg-warning {
+            background-color: #f5d700 !important;
+            color: #000;
+        }
     </style>
     <div class="main-content-inner">
         <div class="main-content-wrap">
@@ -130,7 +143,15 @@
                                         <td class="text-center">${{ $order->subtotal }}</td>
                                         <td class="text-center">${{ $order->tax }}</td>
                                         <td class="text-center">${{ $order->total }}</td>
-                                        <td class="text-center">{{ $order->status }}</td>
+                                        <td class="text-center">
+                                            @if ($order->status === 'delivered')
+                                                <span class="badge bg-success">Delivered</span>
+                                            @elseif ($order->status === 'canceled')
+                                                <span class="badge bg-danger">Canceled</span>
+                                            @else
+                                                <span class="badge bg-warning">Ordered</span>
+                                            @endif
+                                        </td>
                                         <td class="text-center">{{ $order->created_at->format('d M Y H:i') }}</td>
                                         <td class="text-center">{{ $order->orderItems->count() }}</td>
                                         <td class="text-center">{{ $order->delivered_date }}</td>
