@@ -17,7 +17,7 @@
                         <div class="overflow-hidden position-relative h-100">
                             <div class="slideshow-character position-absolute bottom-0 pos_right-center">
                                 <img loading="lazy" src="{{ asset('uploads/slides') }}/{{ $slide->image }}" width="542"
-                                    height="733" alt="Woman Fashion 1"
+                                    height="733" alt="{{ $slide->title }}"
                                     class="slideshow-character__img animate animate_fade animate_btt animate_delay-9 w-auto h-auto" />
                                 <div class="character_markup type2">
                                     <p

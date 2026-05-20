@@ -89,9 +89,12 @@ class AdminController extends Controller
 
     public function GenerateBrandsThumbnailsImage($image, $imageName)
     {
-        Image::read($image->path())
-            ->cover(124, 124, 'top')
-            ->save(public_path('uploads/brands') . '/' . $imageName);
+        $destinationPath = public_path('uploads/brands');
+        $img = Image::read($image->path());
+        $img->cover(124, 124, 'top');
+        $img->resize(124, 124, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save($destinationPath . '/' . $imageName);
     }
 
     public function brand_delete($id)
@@ -169,9 +172,12 @@ class AdminController extends Controller
 
     public function GenerateCategoriesThumbnailsImage($image, $imageName)
     {
-        Image::read($image->path())
-            ->cover(124, 124, 'top')
-            ->save(public_path('uploads/categories') . '/' . $imageName);
+        $destinationPath = public_path('uploads/categories');
+        $img = Image::read($image->path());
+        $img->cover(124, 124, 'top');
+        $img->resize(124, 124, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save($destinationPath . '/' . $imageName);
     }
 
     public function category_delete($id)
@@ -374,13 +380,16 @@ class AdminController extends Controller
 
     public function GenerateProductsThumbnailsImage($image, $imageName)
     {
-        $destinationPath       = public_path('uploads/products');
         $destinationThumbnails = public_path('uploads/products/thumbnails');
-
-        $img = Image::read($image->path())->cover(540, 689, 'top');
-        $img->save($destinationPath . '/' . $imageName);
-
-        $img->cover(104, 104, 'top')->save($destinationThumbnails . '/' . $imageName);
+        $destinationPath = public_path('uploads/products');
+        $img = Image::read($image->path());
+        $img->cover(540, 689, 'top');
+        $img->resize(540, 689, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save($destinationPath . '/' . $imageName);
+        $img->resize(104, 104, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save($destinationThumbnails . '/' . $imageName);
     }
 
     public function coupons()
@@ -523,10 +532,11 @@ class AdminController extends Controller
     public function GenerateSlideThumbnailsImage($image, $imageName)
     {
         $destinationPath = public_path('uploads/slides');
-
-        Image::read($image->path())
-            ->cover(124, 124, 'top')
-            ->save($destinationPath . '/' . $imageName);
+        $img = Image::read($image->path());
+        $img->cover(400, 690, "top");
+        $img->resize(400, 690, function ($constraint) {
+            $constraint->aspectRatio();
+        })->save($destinationPath . '/' . $imageName);
     }
 
     public function slide_edit($id)
