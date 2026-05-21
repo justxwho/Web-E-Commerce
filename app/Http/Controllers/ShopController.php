@@ -111,14 +111,22 @@ class ShopController extends Controller
             ->take(8)
             ->get();
 
+
         if (Auth::check()) {
             $cart = \App\Models\Cart::where('user_id', Auth::id())->first();
         } else {
             $cart = \App\Models\Cart::where('session_id', session()->getId())->first();
         }
+        $wishlistCart = null;
+        if (Auth::check()) {
+            $wishlistCart = Cart::where('user_id', Auth::id())
+                ->where('type', 'wishlist')
+                ->withCount('items')
+                ->first();
+        }
 
         $items = $cart ? $cart->items()->get() : collect();
 
-        return view('details', compact('product', 'rproducts', 'items'));
+        return view('details', compact('product', 'rproducts', 'items', 'wishlistCart'));
     }
 }

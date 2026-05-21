@@ -150,10 +150,48 @@
                         </form>
                     @endif
                     <div class="product-single__addtolinks">
-                        <a href="#" class="menu-link menu-link_us-s add-to-wishlist"><svg width="16"
-                                height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <use href="#icon_heart" />
-                            </svg><span>Add to Wishlist</span></a>
+                        @php
+                            $inWishlistMain =
+                                $wishlistCart && $wishlistCart->items->where('product_id', $product->id)->count() > 0;
+                            $wishlistItemMain = $inWishlistMain
+                                ? $wishlistCart->items->where('product_id', $product->id)->first()
+                                : null;
+                        @endphp
+                        @if (!$inWishlistMain)
+                            <a href="#" class="menu-link menu-link_us-s add-to-wishlist"
+                                onclick="event.preventDefault(); document.getElementById('wishlist-add-form').submit();">
+                                <svg width="16" height="16" viewBox="0 0 20 20" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <use href="#icon_heart" />
+                                </svg><span>Add to Wishlist</span>
+                            </a>
+                            <form id="wishlist-add-form" method="POST" action="{{ route('wishlist.add') }}"
+                                style="display:none;">
+                                @csrf
+                                <input type="hidden" name="id" value="{{ $product->id }}">
+                                <input type="hidden" name="name" value="{{ $product->name }}">
+                                <input type="hidden" name="price"
+                                    value="{{ $product->sale_price ?: $product->regular_price }}">
+                                <input type="hidden" name="quantity" value="1">
+                            </form>
+                        @else
+                            <a href="#" class="menu-link menu-link_us-s"
+                                onclick="event.preventDefault(); document.getElementById('wishlist-remove-form').submit();">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#e74c3c"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+                         2 5.42 4.42 3 7.5 3
+                         c1.74 0 3.41.81 4.5 2.09
+                         C13.09 3.81 14.76 3 16.5 3
+                         19.58 3 22 5.42 22 8.5
+                         c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                </svg><span>Remove from Wishlist</span>
+                            </a>
+                            <form id="wishlist-remove-form" method="POST"
+                                action="{{ route('wishlist.remove', $wishlistItemMain->id) }}" style="display:none;">
+                                @csrf
+                            </form>
+                        @endif
                         <share-button class="share-button">
                             <button
                                 class="menu-link menu-link_us-s to-share border-0 bg-transparent d-flex align-items-center">
@@ -491,14 +529,49 @@
                                         </span>
                                     </div>
 
-                                    <button
-                                        class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
-                                        title="Add To Wishlist">
-                                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <use href="#icon_heart" />
-                                        </svg>
-                                    </button>
+                                    @php
+                                        $inWishlist =
+                                            $wishlistCart &&
+                                            $wishlistCart->items->where('product_id', $rproduct->id)->count() > 0;
+                                        $wishlistItem = $inWishlist
+                                            ? $wishlistCart->items->where('product_id', $rproduct->id)->first()
+                                            : null;
+                                    @endphp
+                                    @if (!$inWishlist)
+                                        <form method="POST" action="{{ route('wishlist.add') }}">
+                                            @csrf
+                                            <input type="hidden" name="id" value="{{ $rproduct->id }}">
+                                            <input type="hidden" name="name" value="{{ $rproduct->name }}">
+                                            <input type="hidden" name="price"
+                                                value="{{ $rproduct->sale_price ?: $rproduct->regular_price }}">
+                                            <input type="hidden" name="quantity" value="1">
+                                            <button type="submit"
+                                                class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist"
+                                                title="Add To Wishlist">
+                                                <svg width="16" height="16" viewBox="0 0 20 20"
+                                                    xmlns="http://www.w3.org/2000/svg">
+                                                    <use href="#icon_heart" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    @else
+                                        <form method="POST" action="{{ route('wishlist.remove', $wishlistItem->id) }}">
+                                            @csrf
+                                            <button title="Remove From Wishlist" type="submit"
+                                                class="pc__btn-wl position-absolute top-0 end-0 bg-transparent border-0 js-add-wishlist">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    viewBox="0 0 24 24" fill="#e74c3c">
+                                                    <path
+                                                        d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+                                                                                            2 5.42 4.42 3 7.5 3
+                                                                                            c1.74 0 3.41.81 4.5 2.09
+                                                                                            C13.09 3.81 14.76 3 16.5 3
+                                                                                            19.58 3 22 5.42 22 8.5
+                                                                                            c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                                </svg>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </div>
                         @endforeach
