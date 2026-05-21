@@ -154,7 +154,7 @@
                             <tbody>
                                 @foreach ($categories as $category)
                                     <tr>
-                                        <td>4</td>
+                                        <td>{{ $category->id }}</td>
                                         <td class="pname">
                                             <div class="image">
                                                 <img src="{{ asset('uploads/categories') }}/{{ $category->image }}"
@@ -165,7 +165,7 @@
                                             </div>
                                         </td>
                                         <td>{{ $category->slug }}</td>
-                                        <td><a href="#" target="_blank">2</a></td>
+                                        <td><a href="#" target="_blank">{{ $category->products->count() }}</a></td>
                                         <td>
                                             <div class="list-icon-function">
                                                 <a href="{{ route('admin.categories.edit', ['id' => $category->id]) }}">
