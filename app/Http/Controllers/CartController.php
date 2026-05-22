@@ -22,13 +22,13 @@ class CartController extends Controller
     private function getCart($type = 'cart')
     {
         if (Auth::check()) {
-            return Cart::firstOrCreate([
+            return Cart::with('items')->firstOrCreate([
                 'user_id' => Auth::id(),
                 'type' => $type
             ]);
         }
 
-        return Cart::firstOrCreate([
+        return Cart::with('items')->firstOrCreate([
             'session_id' => session()->getId(),
             'type' => $type
         ]);

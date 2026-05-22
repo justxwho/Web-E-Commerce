@@ -122,7 +122,7 @@
                         <div class="cart-table-footer">
                             <form method="POST" action="{{ route('wishlist.clear') }}">
                                 @csrf
-                                <button class="btn btn-light clear-cart" type="submit">CLEAR CART</button>
+                                <button class="btn btn-light clear-cart" type="submit">CLEAR LIST</button>
                             </form>
                         </div>
                     </div>
