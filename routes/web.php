@@ -14,11 +14,13 @@ use PHPUnit\Metadata\Group;
 Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
+// Shop
 Route::prefix('/shop')->group(function () {
     Route::get('/', [ShopController::class, 'index'])->name('shop.index');
     Route::get('/{product_slug}', [ShopController::class, 'product_details'])->name('shop.product.details');
 });
 
+// Cart
 Route::prefix('/cart')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('cart.index');
     Route::post('/add/{id}', [CartController::class, 'add'])->name('cart.add');
@@ -30,6 +32,7 @@ Route::prefix('/cart')->group(function () {
     Route::post('/remove-coupon', [CartController::class, 'remove_coupon_code'])->name('cart.coupon.remove');
 });
 
+// Wishlist
 Route::prefix('/wishlist')->group(function () {
     Route::post('/add', [WishlistController::class, 'add_to_wishlist'])->name('wishlist.add');
     Route::get('/', [WishlistController::class, 'index'])->name('wishlist.index');
@@ -37,10 +40,17 @@ Route::prefix('/wishlist')->group(function () {
     Route::post('/clear', [WishlistController::class, 'clear'])->name('wishlist.clear');
 });
 
+// Checkout
 Route::prefix('checkout')->group(function () {
     Route::get('/', [CartController::class, 'checkout'])->name('cart.checkout');
     Route::post('/place-an-order', [CartController::class, 'place_an_order'])->name('cart.place.an.order');
     Route::get('/order-confirmation/{order}', [CartController::class, 'order_confirmation'])->name('cart.order.confirmation');
+});
+
+// Contact
+Route::prefix('contact')->group(function () {
+    Route::get('/', [HomeController::class, 'contact'])->name('home.contact');
+    Route::post('/store', [HomeController::class, 'contact_store'])->name('home.contact.store');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -91,7 +101,7 @@ Route::middleware(['auth', AuthAdmin::class])->group(function () {
             Route::post('/store', [AdminController::class, 'coupon_store'])->name('admin.coupons.store');
             Route::get('/{id}/edit', [AdminController::class, 'coupon_edit'])->name('admin.coupons.edit');
             Route::post('/update', [AdminController::class, 'coupon_update'])->name('admin.coupons.update');
-            Route::post('{id}/delete', [AdminController::class, 'coupon_delete'])->name('admin.coupons.delete');
+            Route::post('/{id}/delete', [AdminController::class, 'coupon_delete'])->name('admin.coupons.delete');
         });
 
         //Orders
@@ -108,7 +118,13 @@ Route::middleware(['auth', AuthAdmin::class])->group(function () {
             Route::post('/store', [AdminController::class, 'slide_store'])->name('admin.slides.store');
             Route::get('/{id}/edit', [AdminController::class, 'slide_edit'])->name('admin.slides.edit');
             Route::post('/update', [AdminController::class, 'slide_update'])->name('admin.slides.update');
-            Route::post('{id}/delete', [AdminController::class, 'slide_delete'])->name('admin.slides.delete');
+            Route::post('/{id}/delete', [AdminController::class, 'slide_delete'])->name('admin.slides.delete');
+        });
+
+        //Contacts
+        Route::prefix('/contacts')->group(function () {
+            Route::get('/', [AdminController::class, 'contacts'])->name('admin.contacts.index');
+            Route::post('/{id}/delete', [AdminController::class, 'contact_delete'])->name('admin.contacts.delete');
         });
     });
 });

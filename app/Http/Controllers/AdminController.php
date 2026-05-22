@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Transaction;
 use App\Models\Slide;
+use App\Models\Contact;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -635,5 +636,18 @@ class AdminController extends Controller
         }
         $slide->delete();
         return redirect()->route('admin.slides.index')->with('status', 'Slide has been deleted successfully !');
+    }
+
+    public function contacts()
+    {
+        $contacts = Contact::orderBy('created_at', 'DESC')->paginate(10);
+        return view('admin.contacts.index', compact('contacts'));
+    }
+
+    public function contact_delete($id)
+    {
+        $contact = Contact::find($id);
+        $contact->delete();
+        return redirect()->route('admin.contacts.index')->with('status', 'Contact has been deleted successfully !');
     }
 }
