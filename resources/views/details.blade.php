@@ -79,19 +79,6 @@
                             <a href="{{ route('shop.index') }}"
                                 class="menu-link menu-link_us-s text-uppercase fw-medium">The Shop</a>
                         </div><!-- /.breadcrumb -->
-
-                        <div
-                            class="product-single__prev-next d-flex align-items-center justify-content-between justify-content-md-end flex-grow-1">
-                            <a href="#" class="text-uppercase fw-medium"><svg width="10" height="10"
-                                    viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
-                                    <use href="#icon_prev_md" />
-                                </svg><span class="menu-link menu-link_us-s">Prev</span></a>
-                            <a href="#" class="text-uppercase fw-medium"><span
-                                    class="menu-link menu-link_us-s">Next</span><svg width="10" height="10"
-                                    viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
-                                    <use href="#icon_next_md" />
-                                </svg></a>
-                        </div><!-- /.shop-acs -->
                     </div>
                     <h1 class="product-single__name">{{ $product->name }}</h1>
                     <div class="product-single__rating">
@@ -180,11 +167,11 @@
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="#e74c3c"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
-                         2 5.42 4.42 3 7.5 3
-                         c1.74 0 3.41.81 4.5 2.09
-                         C13.09 3.81 14.76 3 16.5 3
-                         19.58 3 22 5.42 22 8.5
-                         c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                             2 5.42 4.42 3 7.5 3
+                             c1.74 0 3.41.81 4.5 2.09
+                             C13.09 3.81 14.76 3 16.5 3
+                             19.58 3 22 5.42 22 8.5
+                             c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                                 </svg><span>Remove from Wishlist</span>
                             </a>
                             <form id="wishlist-remove-form" method="POST"
@@ -563,11 +550,11 @@
                                                     viewBox="0 0 24 24" fill="#e74c3c">
                                                     <path
                                                         d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
-                                                                                            2 5.42 4.42 3 7.5 3
-                                                                                            c1.74 0 3.41.81 4.5 2.09
-                                                                                            C13.09 3.81 14.76 3 16.5 3
-                                                                                            19.58 3 22 5.42 22 8.5
-                                                                                            c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                                                                                2 5.42 4.42 3 7.5 3
+                                                                                                c1.74 0 3.41.81 4.5 2.09
+                                                                                                C13.09 3.81 14.76 3 16.5 3
+                                                                                                19.58 3 22 5.42 22 8.5
+                                                                                                c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                                                 </svg>
                                             </button>
                                         </form>
