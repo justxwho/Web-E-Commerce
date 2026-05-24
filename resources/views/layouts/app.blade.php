@@ -439,7 +439,8 @@
                                 <p class="text-uppercase text-secondary fw-medium mb-4">What are you looking for?</p>
                                 <div class="position-relative">
                                     <input class="search-field__input search-popup__input w-100 fw-medium"
-                                        type="text" name="search-keyword" placeholder="Search products" />
+                                        type="text" name="search-keyword" id="search-input"
+                                        placeholder="Search products" />
                                     <button class="btn-icon search-popup__submit" type="submit">
                                         <svg class="d-block" width="20" height="20" viewBox="0 0 20 20"
                                             fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -450,25 +451,9 @@
                                 </div>
 
                                 <div class="search-popup__results">
-                                    <div class="sub-menu search-suggestion">
-                                        <h6 class="sub-menu__title fs-base">Quicklinks</h6>
-                                        <ul class="sub-menu__list list-unstyled">
-                                            <li class="sub-menu__item"><a href="shop2.html"
-                                                    class="menu-link menu-link_us-s">New Arrivals</a>
-                                            </li>
-                                            <li class="sub-menu__item"><a href="#"
-                                                    class="menu-link menu-link_us-s">Dresses</a></li>
-                                            <li class="sub-menu__item"><a href="shop3.html"
-                                                    class="menu-link menu-link_us-s">Accessories</a>
-                                            </li>
-                                            <li class="sub-menu__item"><a href="#"
-                                                    class="menu-link menu-link_us-s">Footwear</a></li>
-                                            <li class="sub-menu__item"><a href="#"
-                                                    class="menu-link menu-link_us-s">Sweatshirt</a></li>
-                                        </ul>
-                                    </div>
+                                    <ul id="box-content-search">
 
-                                    <div class="search-result row row-cols-5"></div>
+                                    </ul>
                                 </div>
                             </form>
                         </div>
@@ -732,6 +717,79 @@
     <script src="{{ asset('assets/js/plugins/countdown.js') }}"></script>
     <script src="{{ asset('assets/js/theme.js') }}"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        $(function() {
+            let searchTimer = null;
+
+            $("#search-input").on("keyup", function() {
+                var searchQuery = $(this).val().trim();
+
+                clearTimeout(searchTimer);
+
+                if (searchQuery.length <= 2) {
+                    $('#box-content-search').html('');
+                    return;
+                }
+
+                searchTimer = setTimeout(function() {
+                    $.ajax({
+                        type: "GET",
+                        url: "{{ route('home.search') }}",
+                        data: {
+                            query: searchQuery
+                        },
+                        dataType: 'json',
+                        success: function(data) {
+                            $('#box-content-search').html('');
+
+                            if (data.length === 0) {
+                                $('#box-content-search').append(
+                                    '<li class="no-result">Không tìm thấy sản phẩm</li>'
+                                    );
+                                return;
+                            }
+
+                            $.each(data, function(index, item) {
+                                var url =
+                                    "{{ route('shop.product.details', ['product_slug' => 'SLUG_PLACEHOLDER']) }}";
+                                var link = url.replace('SLUG_PLACEHOLDER', item
+                                    .slug);
+                                var imgSrc = item.image ?
+                                    "{{ asset('uploads/products/thumbnails') }}/" +
+                                    item.image :
+                                    "{{ asset('assets/images/placeholder.jpg') }}";
+
+                                $('#box-content-search').append(`
+                            <li>
+                                <ul>
+                                    <li class="product-item gap14 mb-10">
+                                        <div class="image no-bg">
+                                            <img src="${imgSrc}" alt="${item.name}">
+                                        </div>
+                                        <div class="flex items-center justify-between gap20 flex-grow">
+                                            <div class="name">
+                                                <a href="${link}" class="body-text">${item.name}</a>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="mb-10">
+                                        <div class="divider"></div>
+                                    </li>
+                                </ul>
+                            </li>
+                        `);
+                            });
+                        },
+                        error: function() {
+                            $('#box-content-search').html(
+                                '<li class="no-result">Có lỗi xảy ra, vui lòng thử lại.</li>'
+                                );
+                        }
+                    });
+                }, 300);
+            });
+        });
+    </script>
     @stack('scripts')
 </body>
 
