@@ -11,6 +11,7 @@ use App\Models\OrderItem;
 use App\Models\Transaction;
 use App\Models\Slide;
 use App\Models\Contact;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -656,5 +657,21 @@ class AdminController extends Controller
         $query = $request->input('query');
         $results = Product::where('name', 'LIKE', "%{$query}%")->get()->take(8);
         return response()->json($results);
+    }
+
+    public function users()
+    {
+        $users = User::withCount('orders')->orderBy('id', 'DESC')->paginate(10);
+        return view('admin.users.index', compact('users'));
+    }
+
+    public function user_ban($id)
+    {
+        $user = User::findOrFail($id);
+        $user->status = $user->status == 1 ? 0 : 1;
+        $user->save();
+
+        $msg = $user->status == 1 ? 'User has been unlocked!' : 'User has been banned!';
+        return redirect()->route('admin.users.index')->with('status', $msg);
     }
 }

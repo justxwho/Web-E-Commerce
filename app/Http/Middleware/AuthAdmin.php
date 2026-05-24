@@ -18,11 +18,17 @@ class AuthAdmin
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check()) {
+            if (Auth::user()->status == 0) {
+                Session::flush();
+                Auth::logout();
+                return redirect()->route('login')->with('error', 'Your account has been banned!');
+            }
+
             if (Auth::user()->utype === 'ADM') {
                 return $next($request);
             } else {
                 Session::flush();
-                return redirect()->route('login');
+                return redirect()->route('login')->with('error', 'You do not have permission to access this page!');
             }
         } else {
             return redirect()->route('login');

@@ -132,5 +132,11 @@ Route::middleware(['auth', AuthAdmin::class])->group(function () {
 
         // Search
         Route::get('/search', [AdminController::class, 'search'])->name('admin.search');
+
+        //Users
+        Route::prefix('/users')->group(function () {
+            Route::get('/', [AdminController::class, 'users'])->name('admin.users.index');
+            Route::post('/{id}/ban', [AdminController::class, 'user_ban'])->name('admin.users.ban');
+        });
     });
 });
