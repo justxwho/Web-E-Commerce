@@ -471,13 +471,11 @@
                     @else
                         <div class="header-tools__item hover-container">
                             <a href="{{ Auth::user()->utype === 'ADM' ? route('admin.index') : route('user.index') }}"
-                                class="header-tools__item">
-                                <span style="margin-right: 10px; color: #222222; line-height: 1.5em"
-                                    class="pr-6px">{{ Auth::user()->name }}</span>
-                                <svg class="d-block" width="20" height="20" viewBox="0 0 20 20" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <use href="#icon_user" />
-                                </svg>
+                                class="header-tools__item" style="display:flex;align-items:center;gap:8px;">
+                                <span style="color:#222222;line-height:1.5em;">{{ Auth::user()->name }}</span>
+                                <img src="{{ Auth::user()->avatar ? asset('uploads/avatars/' . Auth::user()->avatar) : asset('uploads/avatars/non-avatar.png') }}"
+                                    alt="avatar"
+                                    style="width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0;">
                             </a>
                         </div>
                     @endguest
@@ -616,7 +614,8 @@
                         <li class="sub-menu__item"><a href="shop4.html" class="menu-link menu-link_us-s">Men</a></li>
                         <li class="sub-menu__item"><a href="shop5.html" class="menu-link menu-link_us-s">Women</a>
                         </li>
-                        <li class="sub-menu__item"><a href="shop1.html" class="menu-link menu-link_us-s">Shop All</a>
+                        <li class="sub-menu__item"><a href="{{ route('shop.index') }}"
+                                class="menu-link menu-link_us-s">Shop All</a>
                         </li>
                     </ul>
                 </div>
@@ -626,8 +625,7 @@
                     <ul class="sub-menu__list list-unstyled">
                         <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">Customer
                                 Service</a></li>
-                        <li class="sub-menu__item"><a href="account_dashboard.html"
-                                class="menu-link menu-link_us-s">My Account</a>
+                        <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">My Account</a>
                         </li>
                         <li class="sub-menu__item"><a href="store_location.html"
                                 class="menu-link menu-link_us-s">Find a Store</a>
@@ -642,11 +640,14 @@
                 <div class="footer-column footer-menu mb-4 mb-lg-0">
                     <h6 class="sub-menu__title text-uppercase">Categories</h6>
                     <ul class="sub-menu__list list-unstyled">
-                        <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">Shirts</a></li>
-                        <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">Jeans</a></li>
-                        <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">Shoes</a></li>
-                        <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">Bags</a></li>
-                        <li class="sub-menu__item"><a href="#" class="menu-link menu-link_us-s">Shop All</a>
+                        @foreach ($categories as $category)
+                            <li class="sub-menu__item">
+                                <a href="{{ route('shop.index', ['categories' => $category->id]) }}"
+                                    class="menu-link menu-link_us-s">{{ $category->name }}</a>
+                            </li>
+                        @endforeach
+                        <li class="sub-menu__item"><a href="{{ route('shop.index') }}"
+                                class="menu-link menu-link_us-s">Shop All</a>
                         </li>
                     </ul>
                 </div>
@@ -745,7 +746,7 @@
                             if (data.length === 0) {
                                 $('#box-content-search').append(
                                     '<li class="no-result">Không tìm thấy sản phẩm</li>'
-                                    );
+                                );
                                 return;
                             }
 
@@ -783,7 +784,7 @@
                         error: function() {
                             $('#box-content-search').html(
                                 '<li class="no-result">Có lỗi xảy ra, vui lòng thử lại.</li>'
-                                );
+                            );
                         }
                     });
                 }, 300);

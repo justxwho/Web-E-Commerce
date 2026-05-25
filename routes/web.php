@@ -62,6 +62,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/account-orders', [UserController::class, 'orders'])->name('user.orders');
     Route::get('/account-order/{order_id}/details', [UserController::class, 'order_details'])->name('user.order.details');
     Route::post('/account-order/cancel-order', [UserController::class, 'order_cancel'])->name('user.order.cancel');
+    Route::get('/account-details', [UserController::class, 'account_details'])->name('user.account.details');
+    Route::post('/account-update', [UserController::class, 'account_update'])->name('user.account.update');
 });
 
 Route::middleware(['auth', AuthAdmin::class])->group(function () {
