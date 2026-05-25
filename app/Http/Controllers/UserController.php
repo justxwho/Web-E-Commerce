@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\User;
+use App\Models\Address;
 use App\Models\OrderItem;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
@@ -89,5 +90,99 @@ class UserController extends Controller
         $user->save();
 
         return back()->with('success', 'Updated successfully.');
+    }
+
+    public function addresses()
+    {
+        $addresses = Address::where('user_id', Auth::id())->get();
+        return view('user.addresses.index', compact('addresses'));
+    }
+
+    public function address_add()
+    {
+        return view('user.addresses.add');
+    }
+
+    public function address_store(Request $request)
+    {
+        $request->validate([
+            'name'     => 'required|string|max:255',
+            'phone'    => 'required|string|max:20',
+            'zip'      => 'required|string|max:20',
+            'state'    => 'required|string|max:100',
+            'city'     => 'required|string|max:100',
+            'country'  => 'required|string|max:100',
+            'address'  => 'required|string',
+            'locality' => 'required|string',
+            'landmark' => 'nullable|string',
+        ]);
+
+        if ($request->isdefault) {
+            Address::where('user_id', Auth::id())->update(['isdefault' => 0]);
+        }
+
+        Address::create([
+            'user_id'   => Auth::id(),
+            'name'      => $request->name,
+            'phone'     => $request->phone,
+            'zip'       => $request->zip,
+            'state'     => $request->state,
+            'city'      => $request->city,
+            'country'   => $request->country,
+            'address'   => $request->address,
+            'locality'  => $request->locality,
+            'landmark'  => $request->landmark,
+            'isdefault' => $request->isdefault ? 1 : 0,
+        ]);
+
+        return redirect()->route('user.addresses.index')->with('success', 'Address has been added successfully.');
+    }
+
+    public function address_edit($id)
+    {
+        $address = Address::where('user_id', Auth::id())->findOrFail($id);
+        return view('user.addresses.edit', compact('address'));
+    }
+
+    public function address_update(Request $request)
+    {
+        $address = Address::where('user_id', Auth::id())->findOrFail($request->id);
+
+        $request->validate([
+            'name'     => 'required|string|max:255',
+            'phone'    => 'required|string|max:20',
+            'zip'      => 'required|string|max:20',
+            'state'    => 'required|string|max:100',
+            'city'     => 'required|string|max:100',
+            'country'  => 'required|string|max:100',
+            'address'  => 'required|string',
+            'locality' => 'required|string',
+            'landmark' => 'nullable|string',
+        ]);
+
+        if ($request->isdefault) {
+            Address::where('user_id', Auth::id())->update(['isdefault' => 0]);
+        }
+
+        $address->name      = $request->name;
+        $address->phone     = $request->phone;
+        $address->zip       = $request->zip;
+        $address->state     = $request->state;
+        $address->city      = $request->city;
+        $address->country   = $request->country;
+        $address->address   = $request->address;
+        $address->locality  = $request->locality;
+        $address->landmark  = $request->landmark;
+        $address->isdefault = $request->isdefault ? 1 : 0;
+        $address->save();
+
+        return redirect()->route('user.addresses.index')->with('success', 'Address has been updated successfully.');
+    }
+
+    public function address_delete($id)
+    {
+        $address = Address::where('user_id', Auth::id())->findOrFail($id);
+        $address->delete();
+        return redirect()->route('user.addresses.index')->with('success', 'Address deleted successfully.');
     }
 }

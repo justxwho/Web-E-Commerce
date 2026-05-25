@@ -64,6 +64,16 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/account-order/cancel-order', [UserController::class, 'order_cancel'])->name('user.order.cancel');
     Route::get('/account-details', [UserController::class, 'account_details'])->name('user.account.details');
     Route::post('/account-update', [UserController::class, 'account_update'])->name('user.account.update');
+
+    // Addresses
+    Route::prefix('/addresses')->group(function () {
+        Route::get('/', [UserController::class, 'addresses'])->name('user.addresses.index');
+        Route::get('/add', [UserController::class, 'address_add'])->name('user.addresses.add');
+        Route::post('/store', [UserController::class, 'address_store'])->name('user.addresses.store');
+        Route::get('/{id}/edit', [UserController::class, 'address_edit'])->name('user.addresses.edit');
+        Route::post('/update', [UserController::class, 'address_update'])->name('user.addresses.update');
+        Route::post('/{id}/delete', [UserController::class, 'address_delete'])->name('user.addresses.delete');
+    });
 });
 
 Route::middleware(['auth', AuthAdmin::class])->group(function () {

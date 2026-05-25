@@ -56,7 +56,7 @@
                                             <p>{{ $address->city }}, {{ $address->state }}, {{ $address->country }}</p>
                                             <p>{{ $address->zip }}</p>
                                             <br>
-                                            <p>{{ $address->phone }}</p>
+                                            <p>Mobile: {{ $address->phone }}</p>
                                         </div>
                                     </div>
                                 </div>
