@@ -21,7 +21,7 @@ class UserController extends Controller
     public function orders()
     {
         $orders = Order::where('user_id', Auth::user()->id)->orderBy('created_at', 'DESC')->paginate(10);
-        return view('user.orders', compact('orders'));
+        return view('user.orders.index', compact('orders'));
     }
 
     public function order_details($order_id)
@@ -30,7 +30,7 @@ class UserController extends Controller
         if ($order) {
             $orderItems = OrderItem::where('order_id', $order->id)->orderBy('id')->paginate(12);
             $transaction = Transaction::where('order_id', $order->id)->first();
-            return view('user.order-details', compact('order', 'orderItems', 'transaction'));
+            return view('user.orders.details', compact('order', 'orderItems', 'transaction'));
         } else {
             return redirect()->route('login');
         }

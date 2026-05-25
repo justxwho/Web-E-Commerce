@@ -131,7 +131,7 @@
                                     <h5>Ordered Details</h5>
                                 </div>
                                 <div class="col-6 text-right">
-                                    <a href="{{ route('user.orders') }}" class="btn btn-sm btn-danger">Back</a>
+                                    <a href="{{ route('user.orders.index') }}" class="btn btn-sm btn-danger">Back</a>
                                 </div>
                             </div>
                         </div>
