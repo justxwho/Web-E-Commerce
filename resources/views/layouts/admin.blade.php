@@ -165,7 +165,7 @@
                                 </li>
 
                                 <li class="menu-item">
-                                    <a href="settings.html" class="">
+                                    <a href="{{ route('admin.settings.index') }}" class="">
                                         <div class="icon"><i class="icon-settings"></i></div>
                                         <div class="text">Settings</div>
                                     </a>
@@ -296,10 +296,12 @@
                                             id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-expanded="false">
                                             <span class="header-user wg-user">
                                                 <span class="image">
-                                                    <img src="images/avatar/user-1.png" alt="">
+                                                    <img src="{{ $admin->avatar ? asset('uploads/avatars/' . Auth::user()->avatar) : asset('uploads/avatars/non-avatar.png') }}"
+                                                        alt=""
+                                                        style="height:35px;border-radius:50%;object-fit:cover;">
                                                 </span>
                                                 <span class="flex flex-column">
-                                                    <span class="body-title mb-2">Kristin Watson</span>
+                                                    <span class="body-title mb-2">{{ Auth::user()->name }}</span>
                                                     <span class="text-tiny">Admin</span>
                                                 </span>
                                             </span>
@@ -307,7 +309,7 @@
                                         <ul class="dropdown-menu dropdown-menu-end has-content"
                                             aria-labelledby="dropdownMenuButton3">
                                             <li>
-                                                <a href="#" class="user-item">
+                                                <a href="{{ route('admin.settings.index') }}" class="user-item">
                                                     <div class="icon">
                                                         <i class="icon-user"></i>
                                                     </div>
@@ -315,16 +317,16 @@
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="#" class="user-item">
+                                                <a href="{{ route('admin.contacts.index') }}" class="user-item">
                                                     <div class="icon">
                                                         <i class="icon-mail"></i>
                                                     </div>
                                                     <div class="body-title-2">Inbox</div>
-                                                    <div class="number">27</div>
+                                                    <div class="number">{{ \App\Models\Contact::count() }}</div>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="#" class="user-item">
+                                                <a href="{{ route('admin.index') }}" class="user-item">
                                                     <div class="icon">
                                                         <i class="icon-file-text"></i>
                                                     </div>

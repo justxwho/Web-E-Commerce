@@ -5,6 +5,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Middleware\AuthAdmin;
 use Illuminate\Support\Facades\Auth;
@@ -137,6 +138,12 @@ Route::middleware(['auth', AuthAdmin::class])->group(function () {
         Route::prefix('/users')->group(function () {
             Route::get('/', [AdminController::class, 'users'])->name('admin.users.index');
             Route::post('/{id}/ban', [AdminController::class, 'user_ban'])->name('admin.users.ban');
+        });
+
+        //Settings
+        Route::prefix('/settings')->group(function () {
+            Route::get('/', [AdminController::class, 'settings'])->name('admin.settings.index');
+            Route::post('/update', [AdminController::class, 'setting_update'])->name('admin.settings.update');
         });
     });
 });

@@ -16,6 +16,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use Intervention\Image\Colors\Rgb\Channels\Red;
 use Intervention\Image\Laravel\Facades\Image;
@@ -673,5 +675,52 @@ class AdminController extends Controller
 
         $msg = $user->status == 1 ? 'User has been unlocked!' : 'User has been banned!';
         return redirect()->route('admin.users.index')->with('status', $msg);
+    }
+
+    public function settings()
+    {
+        $admin = Auth::user();
+        return view('admin.settings.index', compact('admin'));
+    }
+
+    public function setting_update(Request $request)
+    {
+        $admin = User::find(Auth::id());
+
+        $request->validate([
+            'name'   => 'required|string|max:255',
+            'email'  => 'required|email|unique:users,email,' . $admin->id,
+            'mobile' => 'required|numeric|digits:10|unique:users,mobile,' . $admin->id,
+            'avatar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $admin->name   = $request->name;
+        $admin->mobile = $request->mobile;
+        $admin->email  = $request->email;
+
+        if ($request->hasFile('avatar')) {
+            // Xóa avatar cũ nếu có
+            if ($admin->avatar && file_exists(public_path('uploads/avatars/' . $admin->avatar))) {
+                unlink(public_path('uploads/avatars/' . $admin->avatar));
+            }
+            $file = $request->file('avatar');
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/avatars'), $filename);
+            $admin->avatar = $filename;
+        }
+
+        if ($request->filled('new_password')) {
+            if (!Hash::check($request->old_password, $admin->password)) {
+                return back()->with('error', 'The old password entered is incorrect.');
+            }
+            if ($request->new_password !== $request->new_password_confirmation) {
+                return back()->with('error', 'New password and confirm password do not match.');
+            }
+            $admin->password = Hash::make($request->new_password);
+        }
+
+        $admin->save();
+
+        return back()->with('success', 'Updated');
     }
 }
