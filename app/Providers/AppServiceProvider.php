@@ -47,6 +47,10 @@ class AppServiceProvider extends ServiceProvider
             $view->with('wishlistCount', $wishlistCount);
         });
 
+        View::composer('layouts.admin', function ($view) {
+            $view->with('admin', \App\Models\User::find(\Illuminate\Support\Facades\Auth::id()));
+        });
+
         View::composer('layouts.app', function ($view) {
             $view->with('categories', Category::all());
         });
