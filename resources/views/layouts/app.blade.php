@@ -8,7 +8,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'SurfsideMedia') }}</title>
+    <title>{{ config('app.name', 'Besnik') }}</title>
 
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -324,7 +324,7 @@
                             <a href="{{ route('cart.index') }}" class="navigation__link">Cart</a>
                         </li>
                         <li class="navigation__item">
-                            <a href="about.html" class="navigation__link">About</a>
+                            <a href="{{ route('home.about') }}" class="navigation__link">About</a>
                         </li>
                         <li class="navigation__item">
                             <a href="{{ route('home.contact') }}" class="navigation__link">Contact</a>
@@ -414,7 +414,7 @@
                             <a href="{{ route('cart.index') }}" class="navigation__link">Cart</a>
                         </li>
                         <li class="navigation__item">
-                            <a href="about.html" class="navigation__link">About</a>
+                            <a href="{{ route('home.about') }}" class="navigation__link">About</a>
                         </li>
                         <li class="navigation__item">
                             <a href="{{ route('home.contact') }}" class="navigation__link">Contact</a>
@@ -658,8 +658,8 @@
             <div class="container d-md-flex align-items-center">
                 <span class="footer-copyright me-auto">©2026 Ha Nhat Nam</span>
                 <div class="footer-settings d-md-flex align-items-center">
-                    <a href="privacy-policy.html">Privacy Policy</a> &nbsp;|&nbsp; <a
-                        href="terms-conditions.html">Terms &amp;
+                    <a href="{{ route('home.policy') }}">Privacy Policy</a> &nbsp;|&nbsp; <a
+                        href="{{ route('home.terms') }}">Terms &amp;
                         Conditions</a>
                 </div>
             </div>

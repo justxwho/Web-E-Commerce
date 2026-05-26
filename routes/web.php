@@ -54,6 +54,15 @@ Route::prefix('contact')->group(function () {
     Route::post('/store', [HomeController::class, 'contact_store'])->name('home.contact.store');
 });
 
+// About
+Route::get('/about', [HomeController::class, 'about'])->name('home.about');
+
+// Policy
+Route::get('/privacy-policy', [HomeController::class, 'policy'])->name('home.policy');
+
+// Terms
+Route::get('/terms', [HomeController::class, 'terms'])->name('home.terms');
+
 // Search
 Route::get('/search', [HomeController::class, 'search'])->name('home.search');
 

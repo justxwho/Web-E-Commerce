@@ -50,7 +50,7 @@
                                                 @csrf
                                                 <button type="submit" class="delete"
                                                     style="background:none;border:none;
-                                                    padding:0;cursor:pointer;font-size:0.8125rem;text-transform: uppercase;border-bottom:2px solid;color:red;font-family:inherit;">
+                                                    padding:0;cursor:pointer;font-size:0.8125rem;text-transform:uppercase;border-bottom:2px solid;color:red;font-family:inherit;">
                                                     Delete
                                                 </button>
                                             </form>

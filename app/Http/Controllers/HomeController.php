@@ -65,4 +65,19 @@ class HomeController extends Controller
         $results = Product::where('name', 'LIKE', "%{$query}%")->get()->take(8);
         return response()->json($results);
     }
+
+    public function about()
+    {
+        return view('about');
+    }
+
+    public function policy()
+    {
+        return view('policy');
+    }
+
+    public function terms()
+    {
+        return view('terms');
+    }
 }
