@@ -159,7 +159,8 @@
                             </div>
                         </div>
 
-                        <a href="#" class="btn-link default-underline text-uppercase fw-medium mt-3">View All</a>
+                        <a href="{{ route('shop.index') }}"
+                            class="btn-link default-underline text-uppercase fw-medium mt-3">View All</a>
                     </div>
                     <div class="col-md-6 col-lg-8 col-xl-80per">
                         <div class="position-relative">
@@ -233,41 +234,6 @@
                                 </div><!-- /.swiper-wrapper -->
                             </div><!-- /.swiper-container js-swiper-slider -->
                         </div><!-- /.position-relative -->
-                    </div>
-                </div>
-            </section>
-
-            <div class="mb-3 mb-xl-5 pt-1 pb-4"></div>
-
-            <section class="category-banner container">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="category-banner__item border-radius-10 mb-5">
-                            <img loading="lazy" class="h-auto"
-                                src="{{ asset('assets/images/home/demo3/category_9.jpg') }}" width="690"
-                                height="665" alt="" />
-                            <div class="category-banner__item-mark">
-                                Starting at $19
-                            </div>
-                            <div class="category-banner__item-content">
-                                <h3 class="mb-0">Blazers</h3>
-                                <a href="#" class="btn-link default-underline text-uppercase fw-medium">Shop Now</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="category-banner__item border-radius-10 mb-5">
-                            <img loading="lazy" class="h-auto"
-                                src="{{ asset('assets/images/home/demo3/category_10.jpg') }}" width="690"
-                                height="665" alt="" />
-                            <div class="category-banner__item-mark">
-                                Starting at $19
-                            </div>
-                            <div class="category-banner__item-content">
-                                <h3 class="mb-0">Sportswear</h3>
-                                <a href="#" class="btn-link default-underline text-uppercase fw-medium">Shop Now</a>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </section>
@@ -370,11 +336,11 @@
                                                         viewBox="0 0 24 24" fill="#e74c3c">
 
                                                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
-                                                            2 5.42 4.42 3 7.5 3
-                                                            c1.74 0 3.41.81 4.5 2.09
-                                                            C13.09 3.81 14.76 3 16.5 3
-                                                            19.58 3 22 5.42 22 8.5
-                                                            c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                                                    2 5.42 4.42 3 7.5 3
+                                                                    c1.74 0 3.41.81 4.5 2.09
+                                                                    C13.09 3.81 14.76 3 16.5 3
+                                                                    19.58 3 22 5.42 22 8.5
+                                                                    c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                                                     </svg>
                                                 </button>
                                             </form>
