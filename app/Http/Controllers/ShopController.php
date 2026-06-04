@@ -45,8 +45,8 @@ class ShopController extends Controller
                 $o_order = 'DESC';
         }
 
-        $brands = Brand::orderBy('name')->get();
-        $categories = Category::orderBy('name')->get();
+        $brands = Brand::withCount('products')->orderBy('name')->get();
+        $categories = Category::withCount('products')->orderBy('name')->get();
 
         // QUERY BUILDER
         $products = Product::query();
@@ -68,10 +68,10 @@ class ShopController extends Controller
         });
 
         // FINAL
-        $products = $products->orderBy($o_column, $o_order)
+        $products = $products->with(['category', 'brand'])
+            ->orderBy($o_column, $o_order)
             ->paginate($size)
             ->withQueryString();
-
         // CART
         if (Auth::check()) {
             $cart = \App\Models\Cart::where('user_id', Auth::id())->first();
