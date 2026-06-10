@@ -33,10 +33,12 @@
                         <div class="body-title">Coupon Code <span class="tf-color-1">*</span></div>
                         <input class="flex-grow" type="text" placeholder="Coupon Code" name="code" tabindex="0"
                             value="{{ old('code') }}" aria-required="true" required="">
+                        @error('code')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('code')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
                     <fieldset class="category">
                         <div class="body-title">Coupon Type</div>
                         <div class="select flex-grow">
@@ -46,34 +48,42 @@
                                 <option value="percent">Percent</option>
                             </select>
                         </div>
+                        @error('type')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('type')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
                     <fieldset class="name">
                         <div class="body-title">Value <span class="tf-color-1">*</span></div>
                         <input class="flex-grow" type="text" placeholder="Coupon Value" name="value" tabindex="0"
                             value="{{ old('value') }}" aria-required="true" required="">
+                        @error('value')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('value')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
                     <fieldset class="name">
                         <div class="body-title">Cart Value <span class="tf-color-1">*</span></div>
                         <input class="flex-grow" type="text" placeholder="Cart Value" name="cart_value" tabindex="0"
                             value="{{ old('cart_value') }}" aria-required="true" required="">
+                        @error('cart_value')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('cart_value')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
                     <fieldset class="name">
                         <div class="body-title">Expiry Date <span class="tf-color-1">*</span></div>
                         <input class="flex-grow" type="date" placeholder="Expiry Date" name="expiry_date" tabindex="0"
                             value="{{ old('expiry_date') }}" aria-required="true" required="">
+                        @error('expiry_date')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('expiry_date')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
 
                     <div class="bot">
                         <div></div>

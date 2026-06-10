@@ -37,19 +37,23 @@
                         </div>
                         <input class="flex-grow" type="text" placeholder="Category name" name="name" tabindex="0"
                             value="{{ old('name') }}" aria-required="true" required="">
+                        @error('name')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('name')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
                     <fieldset class="name">
                         <div class="body-title">Category Slug <span class="tf-color-1">*</span>
                         </div>
                         <input class="flex-grow" type="text" placeholder="Category Slug" name="slug" tabindex="0"
                             value="{{ old('slug') }}" aria-required="true" required="">
+                        @error('slug')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('slug')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
                     <fieldset>
                         <div class="body-title">Upload images <span class="tf-color-1">*</span>
                         </div>
@@ -68,10 +72,12 @@
                                 </label>
                             </div>
                         </div>
+                        @error('image')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('image')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
                     <div class="bot">
                         <div></div>
                         <button class="tf-button w208" type="submit">Save</button>

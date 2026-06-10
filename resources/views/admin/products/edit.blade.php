@@ -39,20 +39,24 @@
                         <input class="mb-10" type="text" placeholder="Enter product name" name="name" tabindex="0"
                             value="{{ $product->name }}" aria-required="true" required="">
                         <div class="text-tiny">Do not exceed 100 characters when entering the product name.</div>
+                        @error('name')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('name')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
 
                     <fieldset class="name">
                         <div class="body-title mb-10">Slug <span class="tf-color-1">*</span></div>
                         <input class="mb-10" type="text" placeholder="Enter product slug" name="slug" tabindex="0"
                             value="{{ $product->slug }}" aria-required="true" required="">
                         <div class="text-tiny">Do not exceed 100 characters when entering the product name.</div>
+                        @error('slug')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('slug')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
 
                     <div class="gap22 cols">
                         <fieldset class="category">
@@ -68,10 +72,12 @@
                                     @endforeach
                                 </select>
                             </div>
+                            @error('category_id')
+                                <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                    {{ $message }}
+                                </p>
+                            @enderror
                         </fieldset>
-                        @error('category_id')
-                            <span class="alert alert-danger text-center">{{ $message }}</span>
-                        @enderror
                         <fieldset class="brand">
                             <div class="body-title mb-10">Brand <span class="tf-color-1">*</span>
                             </div>
@@ -85,10 +91,12 @@
                                     @endforeach
                                 </select>
                             </div>
+                            @error('brand_id')
+                                <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                    {{ $message }}
+                                </p>
+                            @enderror
                         </fieldset>
-                        @error('brand_id')
-                            <span class="alert alert-danger text-center">{{ $message }}</span>
-                        @enderror
                     </div>
 
                     <fieldset class="shortdescription">
@@ -96,10 +104,12 @@
                         <textarea class="mb-10 ht-150" name="short_description" placeholder="Short Description" tabindex="0"
                             aria-required="true" required="">{{ $product->short_description }}</textarea>
                         <div class="text-tiny">Do not exceed 100 characters when entering the product name.</div>
+                        @error('short_description')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('short_description')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
 
                     <fieldset class="description">
                         <div class="body-title mb-10">Description <span class="tf-color-1">*</span>
@@ -107,10 +117,12 @@
                         <textarea class="mb-10" name="description" placeholder="Description" tabindex="0" aria-required="true"
                             required="">{{ $product->description }}</textarea>
                         <div class="text-tiny">Do not exceed 100 characters when entering the product name.</div>
+                        @error('description')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('description')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
                 </div>
                 <div class="wg-box">
                     <fieldset>
@@ -136,10 +148,12 @@
                                 </label>
                             </div>
                         </div>
+                        @error('image')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('image')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
 
                     <fieldset>
                         <div class="body-title mb-10">Upload Gallery Images</div>
@@ -165,10 +179,12 @@
                                 </label>
                             </div>
                         </div>
+                        @error('images')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('images')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
 
                     <div class="cols gap22">
                         <fieldset class="name">
@@ -176,18 +192,22 @@
                             <input class="mb-10" type="text" placeholder="Enter regular price" name="regular_price"
                                 tabindex="0" value="{{ $product->regular_price }}" aria-required="true"
                                 required="">
+                            @error('regular_price')
+                                <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                    {{ $message }}
+                                </p>
+                            @enderror
                         </fieldset>
-                        @error('regular_price')
-                            <span class="alert alert-danger text-center">{{ $message }}</span>
-                        @enderror
                         <fieldset class="name">
                             <div class="body-title mb-10">Sale Price <span class="tf-color-1">*</span></div>
                             <input class="mb-10" type="text" placeholder="Enter sale price" name="sale_price"
                                 tabindex="0" value="{{ $product->sale_price }}">
+                            @error('sale_price')
+                                <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                    {{ $message }}
+                                </p>
+                            @enderror
                         </fieldset>
-                        @error('sale_price')
-                            <span class="alert alert-danger text-center">{{ $message }}</span>
-                        @enderror
                     </div>
 
 
@@ -197,19 +217,23 @@
                             </div>
                             <input class="mb-10" type="text" placeholder="Enter SKU" name="SKU" tabindex="0"
                                 value="{{ $product->SKU }}" aria-required="true" required="">
+                            @error('SKU')
+                                <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                    {{ $message }}
+                                </p>
+                            @enderror
                         </fieldset>
-                        @error('SKU')
-                            <span class="alert alert-danger text-center">{{ $message }}</span>
-                        @enderror
                         <fieldset class="name">
                             <div class="body-title mb-10">Quantity <span class="tf-color-1">*</span>
                             </div>
                             <input class="mb-10" type="text" placeholder="Enter quantity" name="quantity"
                                 tabindex="0" value="{{ $product->quantity }}" aria-required="true" required="">
+                            @error('quantity')
+                                <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                    {{ $message }}
+                                </p>
+                            @enderror
                         </fieldset>
-                        @error('quantity')
-                            <span class="alert alert-danger text-center">{{ $message }}</span>
-                        @enderror
                     </div>
 
                     <div class="cols gap22">
@@ -224,10 +248,12 @@
                                     </option>
                                 </select>
                             </div>
+                            @error('stock_status')
+                                <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                    {{ $message }}
+                                </p>
+                            @enderror
                         </fieldset>
-                        @error('stock_status')
-                            <span class="alert alert-danger text-center">{{ $message }}</span>
-                        @enderror
                         <fieldset class="name">
                             <div class="body-title mb-10">Featured</div>
                             <div class="select mb-10">
@@ -236,10 +262,12 @@
                                     <option value="1" {{ $product->featured == '1' ? 'selected' : '' }}>Yes</option>
                                 </select>
                             </div>
+                            @error('featured')
+                                <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                    {{ $message }}
+                                </p>
+                            @enderror
                         </fieldset>
-                        @error('featured')
-                            <span class="alert alert-danger text-center">{{ $message }}</span>
-                        @enderror
                     </div>
                     <div class="cols gap10">
                         <button class="tf-button w-full" type="submit">Update product</button>

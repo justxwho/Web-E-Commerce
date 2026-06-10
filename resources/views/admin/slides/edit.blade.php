@@ -37,34 +37,42 @@
                         <div class="body-title">Tagline <span class="tf-color-1">*</span></div>
                         <input class="flex-grow" type="text" placeholder="Tagline" name="tagline" tabindex="0"
                             value="{{ $slide->tagline }}" aria-required="true" required="">
+                        @error('tagline')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('tagline')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
                     <fieldset class="name">
                         <div class="body-title">Title <span class="tf-color-1">*</span></div>
                         <input class="flex-grow" type="text" placeholder="Title" name="title" tabindex="0"
                             value="{{ $slide->title }}" aria-required="true" required="">
+                        @error('title')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('title')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
                     <fieldset class="name">
                         <div class="body-title">Subtitle <span class="tf-color-1">*</span></div>
                         <input class="flex-grow" type="text" placeholder="Subtitle" name="subtitle" tabindex="0"
                             value="{{ $slide->subtitle }}" aria-required="true" required="">
+                        @error('subtitle')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('subtitle')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
                     <fieldset class="name">
                         <div class="body-title">Link <span class="tf-color-1">*</span></div>
                         <input class="flex-grow" type="text" placeholder="Link" name="link" tabindex="0"
                             value="{{ $slide->link }}" aria-required="true" required="">
+                        @error('link')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('link')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
                     <fieldset>
                         <div class="body-title">Upload images <span class="tf-color-1">*</span>
                         </div>
@@ -87,10 +95,12 @@
                                 </label>
                             </div>
                         </div>
+                        @error('image')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('image')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
                     <fieldset class="category">
                         <div class="body-title">Status</div>
                         <div class="select flex-grow">
@@ -100,10 +110,12 @@
                                 <option value="0" @if ($slide->status == '0') selected @endif>Inactive</option>
                             </select>
                         </div>
+                        @error('select')
+                            <p class="text-tiny" style="color:#e53935;margin-top:-6px;margin-bottom:8px;">
+                                {{ $message }}
+                            </p>
+                        @enderror
                     </fieldset>
-                    @error('select')
-                        <span class="alert alert-danger text-center">{{ $message }}</span>
-                    @enderror
                     <div class="bot">
                         <div></div>
                         <button class="tf-button w208" type="submit">Update</button>
