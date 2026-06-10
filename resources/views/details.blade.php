@@ -167,11 +167,11 @@
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="#e74c3c"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
-                             2 5.42 4.42 3 7.5 3
-                             c1.74 0 3.41.81 4.5 2.09
-                             C13.09 3.81 14.76 3 16.5 3
-                             19.58 3 22 5.42 22 8.5
-                             c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                     2 5.42 4.42 3 7.5 3
+                                     c1.74 0 3.41.81 4.5 2.09
+                                     C13.09 3.81 14.76 3 16.5 3
+                                     19.58 3 22 5.42 22 8.5
+                                     c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                                 </svg><span>Remove from Wishlist</span>
                             </a>
                             <form id="wishlist-remove-form" method="POST"
@@ -478,20 +478,20 @@
                                                 class="pc__img pc__img-second">
                                         @endif
                                     </a>
-                                    @if (isset($items) && $items->where('product_id', $product->id)->count() > 0)
+                                    @if (isset($items) && $items->where('product_id', $rproduct->id)->count() > 0)
                                         <a href="{{ route('cart.index') }}"
                                             class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium btn btn-warning mb-3">
                                             View Cart
                                         </a>
                                     @else
                                         <form name="addtocart-form" method="post"
-                                            action="{{ route('cart.add', ['id' => $product->id]) }}">
+                                            action="{{ route('cart.add', ['id' => $rproduct->id]) }}">
                                             @csrf
-                                            <input type="hidden" name="id" value="{{ $product->id }}">
-                                            <input type="hidden" name="quantity" value="{{ $product->quantity }}">
-                                            <input type="hidden" name="name" value="{{ $product->name }}">
+                                            <input type="hidden" name="id" value="{{ $rproduct->id }}">
+                                            <input type="hidden" name="quantity" value="{{ $rproduct->quantity }}">
+                                            <input type="hidden" name="name" value="{{ $rproduct->name }}">
                                             <input type="hidden" name="price"
-                                                value="{{ $product->sale_price == '' ? $product->regular_price : $product->sale_price }}">
+                                                value="{{ $rproduct->sale_price == '' ? $rproduct->regular_price : $rproduct->sale_price }}">
                                             <button type="submit"
                                                 class="pc__atc btn anim_appear-bottom btn position-absolute border-0 text-uppercase fw-medium"
                                                 data-aside="cartDrawer" title="Add To Cart">
@@ -550,11 +550,11 @@
                                                     viewBox="0 0 24 24" fill="#e74c3c">
                                                     <path
                                                         d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
-                                                                                                2 5.42 4.42 3 7.5 3
-                                                                                                c1.74 0 3.41.81 4.5 2.09
-                                                                                                C13.09 3.81 14.76 3 16.5 3
-                                                                                                19.58 3 22 5.42 22 8.5
-                                                                                                c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                                                                                                        2 5.42 4.42 3 7.5 3
+                                                                                                        c1.74 0 3.41.81 4.5 2.09
+                                                                                                        C13.09 3.81 14.76 3 16.5 3
+                                                                                                        19.58 3 22 5.42 22 8.5
+                                                                                                        c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                                                 </svg>
                                             </button>
                                         </form>
